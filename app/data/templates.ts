@@ -125,7 +125,7 @@ export const TEMPLATES: PaymentTemplate[] = [
     payments: [{
       id: 'kazna',
       label: { sr: 'Novčana kazna', en: 'Fine', ru: 'Штраф' },
-      preset: { kind: 'uplata', payee: BUDGET, account: '840-743324843-18', paymentCode: '253', model: '97', purpose: 'Novčana kazna po prekršajnom nalogu br. ' },
+      preset: { kind: 'uplata', payee: BUDGET, account: '840-743324843-18', paymentCode: '253', model: '97', purpose: 'Prekršajni nalog br. ' },
       referenceHint: {
         sr: 'Prepišite sa prekršajnog naloga (sadrži šifru opštine, JBKJS i broj naloga).',
         en: 'Copy it from the penalty notice (it contains the municipality code, JBKJS and notice number).',
@@ -238,7 +238,7 @@ export const TEMPLATES: PaymentTemplate[] = [
     payments: [{
       id: 'osnivanje',
       label: { sr: 'Naknada za osnivanje', en: 'Registration fee', ru: 'Сбор за регистрацию' },
-      preset: { kind: 'uplata', payee: 'Agencija za privredne registre', account: '840-1308664-17', paymentCode: '289', model: '97', amount: '2.500,00', purpose: 'Naknada za registraciju osnivanja preduzetnika' },
+      preset: { kind: 'uplata', payee: 'Agencija za privredne registre', account: '840-1308664-17', paymentCode: '289', model: '97', amount: '2.500,00', purpose: 'Naknada za osnivanje preduzetnika' },
       referenceHint: {
         sr: 'Obavezno generišite na pretraga2.apr.gov.rs/GeneratorPozivaNaBroj.',
         en: 'Generate it at pretraga2.apr.gov.rs/GeneratorPozivaNaBroj (mandatory).',

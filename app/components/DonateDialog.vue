@@ -7,7 +7,18 @@ const dialog = ref<HTMLDialogElement>()
 const links = donateConfig.links.filter(l => l.url)
 const wallets = donateConfig.crypto.filter(w => w.address)
 const ipsAccount = normalizeAccount(donateConfig.ips.account)
+const ipsInput = (amount: number): IpsInput => ({
+  account: donateConfig.ips.account,
+  payee: donateConfig.ips.name,
+  amount,
+  paymentCode: '289',
+  purpose: donateConfig.ips.purpose,
+})
+// A donate QR the NBS validator rejects is worse than none: show the IPS tab only when the
+// account checksum and the whole payload (name, purpose lengths) pass validation.
 const hasIps = !!ipsAccount && !!donateConfig.ips.name
+  && isAccountChecksumValid(ipsAccount)
+  && validateIps(ipsInput(donateConfig.ips.amounts[1] ?? donateConfig.ips.amounts[0] ?? 500)).length === 0
 const isEmpty = !links.length && !wallets.length && !hasIps
 
 type Tab = 'ips' | 'crypto' | 'links'
@@ -20,13 +31,7 @@ const tab = ref<Tab>(tabs.value[0] ?? 'ips')
 
 const ipsAmount = ref(donateConfig.ips.amounts[1] ?? donateConfig.ips.amounts[0] ?? 500)
 const ipsPayload = computed(() => hasIps
-  ? buildIpsString({
-      account: donateConfig.ips.account,
-      payee: donateConfig.ips.name,
-      amount: ipsAmount.value,
-      paymentCode: '289',
-      purpose: donateConfig.ips.purpose,
-    })
+  ? buildIpsString(ipsInput(ipsAmount.value))
   : '')
 
 const openWallet = ref<string>()

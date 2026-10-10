@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { TEMPLATES } from '../app/data/templates'
 import { MUNICIPALITIES } from '../app/data/municipalities'
 import { PAYMENT_CODES } from '../app/data/paymentCodes'
-import { isAccountChecksumValid, normalizeAccount } from '../shared/utils/ips'
+import { LIMITS, buildIpsString, isAccountChecksumValid, normalizeAccount, parseIpsString } from '../shared/utils/ips'
 
 describe('template data', () => {
   it('every prefilled account passes the mod 97 check', () => {
@@ -11,6 +11,26 @@ describe('template data', () => {
         const acc = normalizeAccount(p.preset.account ?? '')
         expect(acc, `${tpl.slug}/${p.id}`).not.toBeNull()
         expect(isAccountChecksumValid(acc!), `${tpl.slug}/${p.id}`).toBe(true)
+      }
+    }
+  })
+
+  it('purpose, payee and payer fit the NBS limits after normalisation', () => {
+    for (const tpl of TEMPLATES) {
+      for (const p of tpl.payments) {
+        // Same path as the real QR: buildIpsString cleans the text, parseIpsString reads the tags back.
+        const { input } = parseIpsString(buildIpsString({
+          account: p.preset.account ?? '',
+          payee: p.preset.payee ?? '',
+          payer: p.preset.payer,
+          purpose: p.preset.purpose,
+          amount: 1,
+          paymentCode: '289',
+        }))
+        const id = `${tpl.slug}/${p.id}`
+        expect(input.purpose!.length, `${id} purpose`).toBeLessThanOrEqual(LIMITS.purpose)
+        expect(input.payee.length, `${id} payee`).toBeLessThanOrEqual(LIMITS.payee)
+        expect(input.payer!.length, `${id} payer`).toBeLessThanOrEqual(LIMITS.payer)
       }
     }
   })

@@ -4,16 +4,20 @@ import type { SlipForm, SlipKind } from '~/composables/useSlip'
 const props = defineProps<{
   /** Prefills the slip (template pages). Applied on the server too, so the prerendered HTML shows it. */
   preset?: Partial<SlipForm>
-  /** Restore/save the local draft and read shared links (main page only). */
+  /** Restore/save the local draft (main and tool pages). Shared links are read on every page. */
   persist?: boolean
 }>()
 
 const { t, locale } = useI18n()
-const { form, setForm, patch, script, fromLink } = useSlip()
+const { form, setForm, patch, script, fromLink, restore } = useSlip()
 
 if (props.preset) setForm(props.preset)
-watch(() => props.preset, p => p && setForm(p))
-if (props.persist) useSlip().persistDraft()
+// Another payment tab of the template: its preset replaces the slip, but what the user typed into
+// fields the new preset does not set (payer, amount, reference…) carries over.
+watch(() => props.preset, (preset, old) => {
+  if (preset) setForm({ ...changedFields(form.value, old), ...preset })
+})
+restore(!!props.persist)
 
 // Cyrillic UI → Cyrillic slip by default; the radio can still override it.
 watch(locale, l => (script.value = l === 'sr-cyrl' ? 'cyrl' : 'latn'), { immediate: true })

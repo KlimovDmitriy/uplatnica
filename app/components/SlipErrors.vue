@@ -15,16 +15,26 @@ const FIELDS: [keyof SlipForm, string][] = [
   ['reference', 'slip.reference'],
 ]
 
+/** The drawing clips what the QR would still carry: lines beyond the third and lines wider than the box. */
+function layoutError(field: keyof SlipForm): string | undefined {
+  const box = slipBoxes(form.value.kind).find(b => b.key === field && b.multiline)
+  const problem = box && slipTextProblem(String(form.value[field]), box.w)
+  return problem ? `layout.${problem}` : undefined
+}
+
 const problems = computed(() => FIELDS
   .map(([field, label]) => {
-    const e = fieldError(field)
+    const e = fieldError(field) ?? layoutError(field)
     return e && { field, label: t(label), text: t(`errors.${e}`, { max: LIMITS[field as keyof typeof LIMITS] }), code: e }
   })
   .filter(Boolean) as { field: keyof SlipForm, label: string, text: string, code: string }[])
 
+/** Control digits can only be computed for a digits-only body (letters have no model 97 value). */
+const referenceBody = computed(() => form.value.reference.replace(/[\s-]/g, ''))
+const canAddControl = computed(() => /^\d+$/.test(referenceBody.value))
+
 function fixControl() {
-  const body = form.value.reference.replace(/[\s-]/g, '')
-  if (/^\d+$/.test(body)) form.value.reference = model97Control(body) + body
+  if (canAddControl.value) form.value.reference = model97Control(referenceBody.value) + referenceBody.value
 }
 </script>
 
@@ -40,7 +50,7 @@ function fixControl() {
     >
       <b>{{ p.label }}:</b> {{ p.text }}
       <button
-        v-if="p.code === 'reference.checksum'"
+        v-if="p.code === 'reference.checksum' && canAddControl"
         type="button"
         class="link"
         @click="fixControl"

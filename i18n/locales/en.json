@@ -48,10 +48,12 @@
     },
     "payee": {
       "required": "Enter the recipient",
-      "tooLong": "Up to {max} characters"
+      "tooLong": "Up to {max} characters",
+      "tooManyLines": "Up to 3 lines"
     },
     "payer": {
-      "tooLong": "Up to {max} characters"
+      "tooLong": "Up to {max} characters",
+      "tooManyLines": "Up to 3 lines"
     },
     "amount": {
       "invalid": "Enter an amount, e.g. 1,500.00"
@@ -69,6 +71,10 @@
       "tooLong": "Up to {max} characters",
       "invalid": "Only digits, letters and dashes",
       "checksum": "Model 97 check digits are wrong"
+    },
+    "layout": {
+      "lines": "The slip fits 3 lines at most, the rest will not be visible",
+      "wide": "A line is too long for the box on the slip (about 55 lowercase letters or 43 capitals fit), its end will be cut off"
     }
   },
   "actions": {

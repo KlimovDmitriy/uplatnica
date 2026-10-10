@@ -53,9 +53,9 @@ const MUP_FOREIGNERS = { label: 'MUP — informacije za strance', url: 'https://
 const BUDGET = 'Budžet Republike Srbije'
 
 const EPLATI_NOTE: Localized = {
-  sr: 'MUP prihvata samo uplatnice napravljene na portalu eUprava (ePlati). Svaka ima jedinstven poziv na broj, pa ručno popunjen nalog neće biti prihvaćen.',
-  en: 'The Ministry of Interior (MUP) only accepts slips generated on the eUprava portal (ePlati). Each has a unique reference number, so a hand-filled slip will be rejected.',
-  ru: 'МВД (MUP) принимает только квитанции, созданные на портале eUprava (ePlati). У каждой уникальный poziv na broj, поэтому заполненная вручную квитанция не подойдёт.',
+  sr: 'MUP evidentira uplatu po pozivu na broj sa portala eUprava (ePlati); ručno popunjen nalog bez tog poziva na broj može ne biti priznat.',
+  en: 'The Ministry of Interior (MUP) records the payment by the reference number generated on the eUprava portal (ePlati); a hand-filled slip without that reference may not be recognised.',
+  ru: 'МВД (MUP) фиксирует оплату по poziv na broj, созданному на портале eUprava (ePlati); заполненная вручную квитанция без этого poziv na broj может не быть признана.',
 }
 
 const WELCOME_NOTE: Localized = {
@@ -98,14 +98,14 @@ export const TEMPLATES: PaymentTemplate[] = [
     }],
     notes: [
       {
-        sr: 'Od 3. januara 2025. poziv na broj mora da sadrži i JBKJS organa. Stare tabele samo sa šifrom opštine više ne važe.',
-        en: 'Since 3 January 2025 the reference must also include the JBKJS of the authority. Old tables with only the municipality code are outdated.',
-        ru: 'С 3 января 2025 года в poziv na broj нужно указывать и JBKJS органа. Старые таблицы только с кодом общины устарели.',
+        sr: 'Od 1. januara 2025. poziv na broj mora da sadrži i JBKJS organa. Stare tabele samo sa šifrom opštine više ne važe.',
+        en: 'Since 1 January 2025 the reference must also include the JBKJS of the authority. Old tables with only the municipality code are outdated.',
+        ru: 'С 1 января 2025 года в poziv na broj нужно указывать и JBKJS органа. Старые таблицы только с кодом общины устарели.',
       },
       { sr: 'Za uplatu u gotovini na šalteru koristi se šifra 153.', en: 'For cash at the counter use code 153.', ru: 'Для оплаты наличными в окошке используется код 153.' },
     ],
     sources: [PARAGRAF_ACCOUNTS, { label: 'Uprava za trezor — obaveštenje', url: 'https://www.trezor.gov.rs/sr/news/2025_01_15/' }, PARAGRAF_RAT, { label: 'KJS — pretraga JBKJS', url: 'https://kjs.trezor.gov.rs' }],
-    checkedAt: '2026-09',
+    checkedAt: '2026-10',
   },
   {
     slug: 'saobracajna-kazna',
@@ -143,7 +143,7 @@ export const TEMPLATES: PaymentTemplate[] = [
       ru: 'Всегда сверяйте счёт на постановлении: городские штрафы (парковка, коммунальная полиция) идут на другие счета.',
     }],
     sources: [{ label: 'Pravilnik o računima za uplatu javnih prihoda, Prilog (Paragraf)', url: 'https://www.paragraf.rs/propisi/pravilnik_o_uslovima_i_nacinu_vodjenja_racuna_za_uplatu_javnih_prihoda_i_raspored_sredstava_sa_tih_racuna-2.html' }, { label: 'Prekršajni nalog — 100 pitanja (Paragraf)', url: 'https://www.paragraf.rs/100pitanja/krivicno_pravo/prekrsajni_nalog.html' }],
-    checkedAt: '2026-09',
+    checkedAt: '2026-10',
   },
   {
     slug: 'porez-na-imovinu',
@@ -181,7 +181,7 @@ export const TEMPLATES: PaymentTemplate[] = [
       ru: 'Плательщики, ведущие бухучёт, платят на счёт 840-713122843-64.',
     }],
     sources: [PARAGRAF_ACCOUNTS, { label: 'GPU Novi Sad — porez na imovinu', url: 'https://gpu.novisad.rs/sr/porez-na-imovinu-fizichkikh-lica' }],
-    checkedAt: '2026-09',
+    checkedAt: '2026-10',
   },
   {
     slug: 'pausalni-porez-i-doprinosi',
@@ -207,9 +207,9 @@ export const TEMPLATES: PaymentTemplate[] = [
       ...p,
       preset: { ...p.preset, kind: 'uplata' },
       referenceHint: {
-        sr: 'Iz rešenja Poreske uprave; obično kontrolni broj + šifra opštine + PIB.',
-        en: 'From the Tax Administration decision; usually check digits + municipality code + tax ID (PIB).',
-        ru: 'Из решения налоговой; обычно контрольные цифры + код общины + PIB.',
+        sr: 'Iz rešenja Poreske uprave ili primera uplatnice sa QR kodom (od 2026. poziv na broj sadrži BOP za 2026).',
+        en: 'From the Tax Administration decision or its sample slip with a QR code (from 2026 the reference contains the BOP for 2026).',
+        ru: 'Из решения налоговой или её образца квитанции с QR-кодом (с 2026 года poziv na broj содержит BOP на 2026 год).',
       },
       amountNote: { sr: 'Mesečni iznos iz rešenja.', en: 'Monthly amount from the decision.', ru: 'Ежемесячная сумма из решения.' },
     })),
@@ -218,7 +218,7 @@ export const TEMPLATES: PaymentTemplate[] = [
       { sr: 'Dodajte sve četiri uplatnice u paket i preuzmite ih u jednom PDF-u.', en: 'Add all four slips to the batch and download them as one PDF.', ru: 'Добавьте все четыре квитанции в пакет и скачайте одним PDF.' },
     ],
     sources: [PARAGRAF_ACCOUNTS, { label: 'Paragraf — poziv na broj za paušalce', url: 'https://www.paragraf.rs/dnevne-vesti/050116/050116-vest4.html' }],
-    checkedAt: '2026-09',
+    checkedAt: '2026-10',
   },
   {
     slug: 'apr-registracija-preduzetnika',
@@ -244,15 +244,15 @@ export const TEMPLATES: PaymentTemplate[] = [
         en: 'Generate it at pretraga2.apr.gov.rs/GeneratorPozivaNaBroj (mandatory).',
         ru: 'Обязательно получите на pretraga2.apr.gov.rs/GeneratorPozivaNaBroj.',
       },
-      amountNote: { sr: 'Prema cenovniku APR (septembar 2026).', en: 'Per the APR price list (September 2026).', ru: 'По прайсу APR (сентябрь 2026).' },
+      amountNote: { sr: 'Prema cenovniku APR (važi od 1. januara 2026).', en: 'Per the APR price list (valid from 1 January 2026).', ru: 'По прайсу APR (действует с 1 января 2026).' },
     }],
     notes: [{
       sr: 'APR ne navodi šifru plaćanja; u nalogu je 289 (uplata građanina). Promena podataka i brisanje koštaju po 1.400 RSD.',
       en: 'APR does not specify a payment code; the slip uses 289 (payment by an individual). Changes and deregistration cost 1,400 RSD each.',
       ru: 'APR не указывает код платежа; в квитанции стоит 289 (платёж гражданина). Изменение данных и закрытие стоят по 1 400 RSD.',
     }],
-    sources: [{ label: 'APR — naknade za preduzetnike', url: 'https://www.apr.gov.rs/registri/preduzetnici/naknade.2066.html' }, { label: 'APR — računi', url: 'https://www.apr.gov.rs/računi.2443.html' }, { label: 'APR — generator poziva na broj', url: 'https://pretraga2.apr.gov.rs/GeneratorPozivaNaBroj/Home/' }],
-    checkedAt: '2026-09',
+    sources: [{ label: 'APR — naknade za preduzetnike', url: 'https://www.apr.gov.rs/registri/preduzetnici/naknade.4864.html' }, { label: 'APR — računi', url: 'https://www.apr.gov.rs/računi.2443.html' }, { label: 'APR — generator poziva na broj', url: 'https://pretraga2.apr.gov.rs/GeneratorPozivaNaBroj/Home/' }],
+    checkedAt: '2026-10',
   },
   {
     slug: 'licna-karta',
@@ -273,7 +273,7 @@ export const TEMPLATES: PaymentTemplate[] = [
       ru: 'Выберите услугу на портале, и он создаст квитанцию с IPS QR-кодом, которую можно оплатить в банке или на почте.',
     }],
     sources: [MUP_DOCS, EPLATI],
-    checkedAt: '2026-09',
+    checkedAt: '2026-10',
   },
   {
     slug: 'pasos',
@@ -293,8 +293,8 @@ export const TEMPLATES: PaymentTemplate[] = [
       en: 'The passport application is exempt from the administrative fee; you pay for the form.',
       ru: 'Заявление на паспорт освобождено от административной пошлины; оплачивается бланк.',
     }],
-    sources: [MUP_DOCS, EPLATI, PARAGRAF_RAT],
-    checkedAt: '2026-09',
+    sources: [MUP_DOCS, EPLATI, PARAGRAF_RAT, { label: 'Paragraf Lex — nove cene dokumenata MUP (Uredba, Sl. glasnik 82/2026)', url: 'https://www.paragraf.rs/dnevne-vesti/090926/090926-vest12.html' }],
+    checkedAt: '2026-10',
   },
   {
     slug: 'vozacka-dozvola',
@@ -317,12 +317,12 @@ export const TEMPLATES: PaymentTemplate[] = [
     ],
     feesValidFrom: '2026-07-01',
     notes: [{
-      sr: 'Uz takse se plaća i obrazac vozačke dozvole po ceniku MUP-a.',
-      en: 'The licence form is paid separately per the MUP price list.',
-      ru: 'Бланк прав оплачивается отдельно по прайсу MUP.',
+      sr: 'Uz takse se plaća i obrazac vozačke dozvole po ceniku MUP-a. Cena izrade obrasca od 12. septembra 2026: 444 RSD (probna dozvola 468 RSD).',
+      en: 'The licence form is paid separately per the MUP price list. Price of the form from 12 September 2026: 444 RSD (probationary licence 468 RSD).',
+      ru: 'Бланк прав оплачивается отдельно по прайсу MUP. Цена изготовления бланка с 12 сентября 2026: 444 RSD (пробные права 468 RSD).',
     }],
-    sources: [MUP_DOCS, EPLATI, PARAGRAF_RAT],
-    checkedAt: '2026-09',
+    sources: [MUP_DOCS, EPLATI, PARAGRAF_RAT, { label: 'Paragraf Lex — nove cene dokumenata MUP (Uredba, Sl. glasnik 82/2026)', url: 'https://www.paragraf.rs/dnevne-vesti/090926/090926-vest12.html' }],
+    checkedAt: '2026-10',
   },
   {
     slug: 'privremeni-boravak',
@@ -338,6 +338,7 @@ export const TEMPLATES: PaymentTemplate[] = [
     payments: [],
     officialPay: WELCOME,
     fees: [
+      { label: { sr: 'Zahtev (RAT tarifni broj 1)', en: 'Application (administrative fee tariff no. 1)', ru: 'Заявление (тарифный номер 1)' }, amount: 430 },
       { label: { sr: 'Taksa za privremeni boravak', en: 'Temporary residence fee', ru: 'Пошлина за ВНЖ' }, amount: 23450 },
       { label: { sr: 'Izdavanje dozvole (kartica)', en: 'Permit card', ru: 'Карта ВНЖ' }, amount: 2190 },
     ],
@@ -348,14 +349,9 @@ export const TEMPLATES: PaymentTemplate[] = [
         en: 'Family reunification with a Serbian citizen pays 50 %; Serbian government scholarship holders are exempt.',
         ru: 'При воссоединении семьи с гражданином Сербии пошлина 50 %; стипендиаты правительства Сербии освобождены.',
       },
-      {
-        sr: 'Uplatnica sa eUprave dozvoljena je samo za zahtev za produženje boravka.',
-        en: 'A slip from eUprava is allowed only for an extension request.',
-        ru: 'Квитанция с eUprava допускается только для заявления о продлении.',
-      },
     ],
     sources: [MUP_FOREIGNERS, WELCOME, PARAGRAF_RAT],
-    checkedAt: '2026-09',
+    checkedAt: '2026-10',
   },
   {
     slug: 'jedinstvena-dozvola',
@@ -382,7 +378,7 @@ export const TEMPLATES: PaymentTemplate[] = [
       ru: 'Заявление подаётся только электронно, самим иностранцем или работодателем.',
     }],
     sources: [MUP_FOREIGNERS, WELCOME, PARAGRAF_RAT],
-    checkedAt: '2026-09',
+    checkedAt: '2026-10',
   },
   {
     slug: 'stalno-nastanjenje',
@@ -408,7 +404,7 @@ export const TEMPLATES: PaymentTemplate[] = [
       ru: 'Способ оплаты уточните в MUP или на портале до оплаты.',
     }],
     sources: [MUP_FOREIGNERS, PARAGRAF_RAT],
-    checkedAt: '2026-09',
+    checkedAt: '2026-10',
   },
 ]
 

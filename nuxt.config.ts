@@ -66,6 +66,12 @@ export default defineNuxtConfig({
     detectBrowserLanguage: false,
   },
 
+  // WebSite/WebPage nodes come from app/plugins/schema-website.server.ts (the module's i18n
+  // defaults list the same @id for every language).
+  schemaOrg: {
+    defaults: false,
+  },
+
   // Fully static: every page in every language is prerendered. The crawler starts from each
   // language's home page and follows its in-language links.
   nitro: {

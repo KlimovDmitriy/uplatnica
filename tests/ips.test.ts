@@ -7,6 +7,7 @@ import {
   model97Control,
   normalizeAccount,
   parseIpsString,
+  slipTextProblem,
   validateIps,
   type IpsInput,
 } from '../shared/utils/ips'
@@ -91,5 +92,65 @@ describe('Cyrillic input', () => {
     expect(s).toContain('N:JP EPS Beograd|')
     expect(s).toContain('P:Đorđe Džajić|')
     expect(s).toContain('S:Uplata|')
+  })
+})
+
+describe('characters outside the NBS set', () => {
+  const payee = (text: string) => buildIpsString({ ...nbsExample, payee: text }).split('|').find(t => t.startsWith('N:'))
+
+  it('replaces dashes, quotes, euro and non-breaking spaces', () => {
+    // The live NBS validator rejects the en dash (error 608), so it must never reach the QR.
+    expect(payee('Kirija – oktobar')).toBe('N:Kirija - oktobar')
+    expect(payee('A — B')).toBe('N:A - B')
+    expect(payee('“Brod” „Mir“')).toBe('N:"Brod" "Mir"')
+    expect(payee('Mile’s ‘bar’')).toBe('N:Mile\'s \'bar\'')
+    expect(payee('10€')).toBe('N:10EUR')
+    expect(payee('A B')).toBe('N:A B')
+  })
+
+  it('drops other characters, keeps allowed punctuation and Serbian letters', () => {
+    expect(payee('A\u{1F600}B | C')).toBe('N:AB C')
+    expect(payee('Müller & sin, "Čačak" (d.o.o.) 5/3 #1')).toBe('N:Muller & sin, "Čačak" (d.o.o.) 5/3 #1')
+    expect(payee('Šđčćž ŠĐČĆŽ')).toBe('N:Šđčćž ŠĐČĆŽ')
+  })
+
+  it('validates the cleaned text', () => {
+    // 35 characters once the en dash became a hyphen, nothing is lost
+    const purpose = `${'a'.repeat(17)} – ${'b'.repeat(15)}`
+    expect(validateIps({ ...nbsExample, purpose })).toEqual([])
+    expect(buildIpsString({ ...nbsExample, purpose })).toContain(`S:${'a'.repeat(17)} - ${'b'.repeat(15)}|`)
+  })
+})
+
+describe('limits that follow the payload', () => {
+  it('measures a two-line purpose as the single line that goes into the QR', () => {
+    // 17 + space + 17 = 35 once the two lines are joined; counted with \r\n it would be 36
+    const purpose = `${'a'.repeat(17)}\n${'b'.repeat(17)}`
+    expect(validateIps({ ...nbsExample, purpose })).toEqual([])
+    expect(buildIpsString({ ...nbsExample, purpose })).toContain(`S:${'a'.repeat(17)} ${'b'.repeat(17)}|`)
+    expect(validateIps({ ...nbsExample, purpose: `${'a'.repeat(18)}\n${'b'.repeat(17)}` })).toEqual(['purpose.tooLong'])
+  })
+
+  it('caps the amount at 999999999999,99 (tag I is at most 18 characters)', () => {
+    expect(validateIps({ ...nbsExample, amount: 999999999999.99 })).toEqual([])
+    expect(validateIps({ ...nbsExample, amount: 1e12 })).toEqual(['amount.invalid'])
+    expect(validateIps({ ...nbsExample, amount: 0 })).toEqual(['amount.invalid'])
+  })
+
+  it('allows 3 lines of payee and payer, not 4', () => {
+    expect(validateIps({ ...nbsExample, payee: 'a\nb\nc' })).toEqual([])
+    expect(validateIps({ ...nbsExample, payee: 'a\nb\nc\nd' })).toEqual(['payee.tooManyLines'])
+    expect(validateIps({ ...nbsExample, payer: 'a\nb\nc\nd' })).toEqual(['payer.tooManyLines'])
+  })
+})
+
+describe('slipTextProblem (what fits the 94 mm box)', () => {
+  it('accepts normal addresses and flags long or capital-heavy lines', () => {
+    expect(slipTextProblem('Petar Petrović\nNjegoševa 5\n11000 Beograd', 94)).toBeNull()
+    expect(slipTextProblem('a'.repeat(54), 94)).toBeNull()
+    expect(slipTextProblem('a'.repeat(70), 94)).toBe('wide')
+    expect(slipTextProblem('ELEKTROPRIVREDA SRBIJE BEOGRAD DIREKCIJA ZA SNABDEVANJE', 94)).toBe('wide')
+    expect(slipTextProblem('a\nb\nc\nd', 94)).toBe('lines')
+    expect(slipTextProblem('', 94)).toBeNull()
   })
 })

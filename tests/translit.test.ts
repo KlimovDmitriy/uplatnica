@@ -17,3 +17,18 @@ describe('toCyrillic', () => {
     expect(toCyrillicDeep({ a: ['nalog'], b: { c: 'uplata' }, n: 1 })).toEqual({ a: ['налог'], b: { c: 'уплата' }, n: 1 })
   })
 })
+
+describe('toCyrillic: domains and portal names stay Latin', () => {
+  it('keeps bare domains', () => {
+    expect(toCyrillic('Pogledajte kjs.trezor.gov.rs i apr.gov.rs.')).toBe('Погледајте kjs.trezor.gov.rs и apr.gov.rs.')
+    expect(toCyrillic('www.mup.gov.rs/stranci')).toBe('www.mup.gov.rs/странци')
+  })
+
+  it('does not treat ordinary words next to a dot as a domain', () => {
+    expect(toCyrillic('Plati.Sada rs')).toBe('Плати.Сада рс')
+  })
+
+  it('keeps "Welcome to Serbia"', () => {
+    expect(toCyrillic('Portal Welcome to Serbia (MUP)')).toBe('Портал Welcome to Serbia (МУП)')
+  })
+})

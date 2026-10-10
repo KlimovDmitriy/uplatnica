@@ -1,6 +1,7 @@
 /**
  * Serbian Latin → Cyrillic transliteration (one-to-one standard alphabet).
- * Leaves alone: {placeholders}, URLs, e-mails and the Latin-only words listed in KEEP.
+ * Leaves alone: {placeholders}, URLs, bare domains ("apr.gov.rs"), e-mails, the portal name
+ * "Welcome to Serbia" and the Latin-only words listed in KEEP.
  */
 const DIGRAPHS: Record<string, string> = {
   LJ: 'Љ', Lj: 'Љ', lj: 'љ',
@@ -21,8 +22,14 @@ const KEEP = new Set([
   'IPS', 'QR', 'RSD', 'EUR', 'PDF', 'PNG', 'PWA', 'USDT', 'USDC', 'TON', 'BTC', 'ETH', 'ERC', 'TRC',
 ])
 
-// {placeholder} | url | e-mail | word
-const TOKEN = /(\{[^}]*\}|https?:\/\/\S+|[\w.+-]+@[\w-]+\.[\w.]+|[\p{L}]+)/gu
+/** Bare domains: at least one label before a known TLD ("kjs.trezor.gov.rs", "apr.gov.rs"). */
+const DOMAIN = '(?:[a-z\\d-]+\\.)+(?:rs|me|com|org|net|eu|info|io|app|gov|edu)(?![\\p{L}\\d-])'
+/** Name of a portal that Cyrillic texts also write in Latin. */
+const PHRASES = 'Welcome to Serbia'
+
+// {placeholder} | url | e-mail | phrase | bare domain | word
+const TOKEN = new RegExp(`(\\{[^}]*\\}|https?://\\S+|[\\w.+-]+@[\\w-]+\\.[\\w.]+|${PHRASES}|${DOMAIN}|[\\p{L}]+)`, 'giu')
+const LATIN_TOKEN = new RegExp(`^(?:${PHRASES}|${DOMAIN})$`, 'iu')
 
 function word(w: string): string {
   if (KEEP.has(w)) return w
@@ -41,7 +48,7 @@ function word(w: string): string {
 }
 
 export function toCyrillic(text: string): string {
-  return text.replace(TOKEN, t => (t.startsWith('{') || t.includes('://') || t.includes('@')) ? t : word(t))
+  return text.replace(TOKEN, t => (t.startsWith('{') || t.includes('://') || t.includes('@') || LATIN_TOKEN.test(t)) ? t : word(t))
 }
 
 export function toCyrillicDeep<T>(value: T): T {

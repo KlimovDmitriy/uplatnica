@@ -36,3 +36,15 @@ describe('municipality codes', () => {
     expect(byName['Grad Beograd']).toBe('501')
   })
 })
+
+describe('municipality names and codes', () => {
+  it('are unique (Palilula exists in Beograd and in Niš)', () => {
+    const names = MUNICIPALITIES.map(([name]) => name)
+    const codes = MUNICIPALITIES.map(([, code]) => code)
+    expect(names.filter((n, i) => names.indexOf(n) !== i)).toEqual([])
+    expect(codes.filter((c, i) => codes.indexOf(c) !== i)).toEqual([])
+    const byName = Object.fromEntries(MUNICIPALITIES)
+    expect(byName['Palilula (Beograd)']).toBe('015')
+    expect(byName['Palilula (Niš)']).toBe('127')
+  })
+})

@@ -2,7 +2,8 @@
 import type { IpsError } from '#shared/utils/ips'
 
 const { t } = useI18n()
-const { setForm } = useSlip()
+const { form, setForm } = useSlip()
+const localePath = useLangPath()
 
 const payload = ref('')
 const parsed = computed(() => (payload.value.trim() ? parseIpsString(payload.value) : null))
@@ -11,8 +12,8 @@ const valid = computed(() => parsed.value && !parsed.value.formatErrors.length &
 
 const TAG_ERRORS: Record<string, string[]> = {
   R: ['account.invalid', 'account.checksum'],
-  N: ['payee.required', 'payee.tooLong'],
-  P: ['payer.tooLong'],
+  N: ['payee.required', 'payee.tooLong', 'payee.tooManyLines'],
+  P: ['payer.tooLong', 'payer.tooManyLines'],
   I: ['amount.invalid'],
   SF: ['paymentCode.invalid'],
   S: ['purpose.tooLong'],
@@ -25,11 +26,16 @@ function tagProblem(tag: string): string {
   return e ? t(`errors.${e}`, { max: LIMITS[e.split('.')[0] as keyof typeof LIMITS] }) : ''
 }
 
-/** Fills the slip on this page with the decoded QR and scrolls to it. */
+/**
+ * Fills the slip on this page with the decoded QR and scrolls to it. Pages without a
+ * generator (portal-only templates) open the home page with the slip in the share link.
+ */
 function openInGenerator() {
   if (!parsed.value) return
   setForm(formFromIps(parsed.value.input))
-  document.getElementById('generator')?.scrollIntoView({ behavior: 'smooth' })
+  const generator = document.getElementById('generator')
+  if (generator) generator.scrollIntoView({ behavior: 'smooth' })
+  else navigateTo(`${localePath('/')}#${SHARE_PARAM}=${encodeSlip(form.value)}`)
 }
 </script>
 

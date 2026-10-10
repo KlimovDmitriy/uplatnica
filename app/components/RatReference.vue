@@ -3,7 +3,7 @@
 import { MUNICIPALITIES } from '~/data/municipalities'
 
 const { t } = useI18n()
-const { patch } = useSlip()
+const { write } = useSlipWriter()
 
 const municipality = ref('')
 const jbkjs = ref('')
@@ -16,7 +16,8 @@ const reference = computed(() => {
   return `${model97Control(body)}-${code.value}-${jbkjs.value.trim()}`
 })
 
-watch(reference, (r) => { if (r) patch({ model: '97', reference: r }) })
+// An incomplete input takes back the reference this builder wrote (unless the user has edited it since).
+watch(reference, r => write(r ? { model: '97', reference: r } : {}))
 </script>
 
 <template>

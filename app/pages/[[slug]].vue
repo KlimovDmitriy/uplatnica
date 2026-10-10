@@ -6,8 +6,9 @@
 import { findTemplate } from '~/data/templates'
 import { FAQ, TOOLS, findTool } from '~/data/tools'
 
-// A fresh page per URL, so everything below is set up once for its slug.
-definePageMeta({ key: route => route.path })
+// A fresh page per URL, so everything below is set up once for its slug. The language prefix is not
+// part of the key: switching language keeps the page, and with it the slip being edited.
+definePageMeta({ key: route => splitLangPrefix(route.path).path })
 
 const route = useRoute()
 const { t, locale } = useI18n()

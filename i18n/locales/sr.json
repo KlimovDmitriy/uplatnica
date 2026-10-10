@@ -48,10 +48,12 @@
     },
     "payee": {
       "required": "Unesite primaoca",
-      "tooLong": "Najviše {max} znakova"
+      "tooLong": "Najviše {max} znakova",
+      "tooManyLines": "Najviše 3 reda"
     },
     "payer": {
-      "tooLong": "Najviše {max} znakova"
+      "tooLong": "Najviše {max} znakova",
+      "tooManyLines": "Najviše 3 reda"
     },
     "amount": {
       "invalid": "Unesite iznos, npr. 1.500,00"
@@ -69,6 +71,10 @@
       "tooLong": "Najviše {max} znakova",
       "invalid": "Dozvoljene su cifre, slova i crtica",
       "checksum": "Kontrolni broj po modelu 97 nije ispravan"
+    },
+    "layout": {
+      "lines": "Na nalogu staju najviše 3 reda, ostali se ne vide",
+      "wide": "Red je predugačak za polje na nalogu (staje oko 55 slova, velikih oko 43), kraj će biti odsečen"
     }
   },
   "actions": {

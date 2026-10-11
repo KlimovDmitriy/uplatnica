@@ -27,7 +27,7 @@ async function copy() {
 
 <template>
   <div>
-    <div class="tools">
+    <div class="pair">
       <section class="card">
         <h2>{{ t('model97.calcTitle') }}</h2>
         <FormField
@@ -39,8 +39,11 @@ async function copy() {
           <input
             id="m97-body"
             v-model="body"
+            class="mono"
+            :aria-invalid="digits && !bodyValid ? 'true' : undefined"
+            :aria-describedby="digits && !bodyValid ? 'm97-body-error' : 'm97-body-hint'"
             type="text"
-            inputmode="numeric"
+            inputmode="text"
             placeholder="3220000111111111000"
           >
         </FormField>
@@ -70,27 +73,32 @@ async function copy() {
           <input
             id="m97-check"
             v-model="check"
+            class="mono"
+            :aria-invalid="checkResult === 'bad' || checkResult === 'format' ? 'true' : undefined"
+            :aria-describedby="checkResult === 'bad' || checkResult === 'format' ? 'm97-check-verdict' : undefined"
             type="text"
-            inputmode="numeric"
+            inputmode="text"
             placeholder="163220000111111111000"
           >
         </FormField>
-        <p
-          v-if="checkResult"
-          class="verdict"
-          :class="checkResult"
-          role="status"
-        >
-          <template v-if="checkResult === 'ok'">
-            ✓ {{ t('model97.ok') }}
-          </template>
-          <template v-else-if="checkResult === 'bad'">
-            ✕ {{ t('model97.bad', { control: expectedControl }) }}
-          </template>
-          <template v-else>
-            {{ t('model97.format') }}
-          </template>
-        </p>
+        <div aria-live="polite">
+          <p
+            v-if="checkResult"
+            id="m97-check-verdict"
+            class="verdict"
+            :class="checkResult === 'ok' ? 'ok' : 'bad'"
+          >
+            <template v-if="checkResult === 'ok'">
+              ✓ {{ t('model97.ok') }}
+            </template>
+            <template v-else-if="checkResult === 'bad'">
+              ✕ {{ t('model97.bad', { control: expectedControl }) }}
+            </template>
+            <template v-else>
+              ✕ {{ t('model97.format') }}
+            </template>
+          </p>
+        </div>
       </section>
     </div>
 
@@ -118,10 +126,10 @@ async function copy() {
 </template>
 
 <style scoped>
-.tools { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0 40px; }
-.card h2 { font-size: 17px; margin: 0 0 14px; }
-.result { display: grid; gap: 6px; margin-top: 16px; padding: 14px; border-radius: 4px; background: var(--hover); justify-items: start; }
-.big { font-size: 22px; font-weight: 700; letter-spacing: .03em; word-break: break-all; }
-.verdict { margin: 14px 0 0; padding: 10px 12px; border-radius: 4px; font-weight: 600; }
-@media (max-width: 720px) { .tools { grid-template-columns: 1fr; } }
+.pair { display: grid; gap: var(--s-4); margin: 0 0 var(--s-6); }
+.card h2 { font-size: var(--fs-lg); margin: 0 0 var(--s-4); }
+.result { display: grid; gap: 6px; margin-top: var(--s-4); padding: 14px; border-radius: var(--r-sm); background: var(--surface-2); justify-items: start; }
+.big { font-size: var(--fs-xl); font-weight: 700; letter-spacing: .03em; word-break: break-all; }
+.card .verdict { margin-top: var(--s-4); }
+@media (min-width: 960px) { .pair { grid-template-columns: 1fr 1fr; } }
 </style>

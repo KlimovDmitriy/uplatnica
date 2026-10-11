@@ -6,7 +6,8 @@
   },
   "hero": {
     "title": "Uplatnica sa IPS QR kodom",
-    "lead": "Popunite nalog direktno na obrascu i odštampajte ga ili preuzmite kao PDF. Više naloga možete dodati u paket i preuzeti u jednom fajlu."
+    "lead": "Popunite nalog direktno na obrascu i odštampajte ga ili preuzmite kao PDF. Više naloga možete dodati u paket i preuzeti u jednom fajlu.",
+    "blankLink": "Popuni prazan nalog ↓"
   },
   "kinds": {
     "uplata": {
@@ -21,7 +22,11 @@
     "payerPlaceholder": "Petar Petrović\nKneza Miloša 10\nBeograd",
     "payeePlaceholder": "Naziv primaoca\nUlica i broj, mesto",
     "accountHint": "18 cifara, sa crticama ili bez: 160-5100000000-02",
-    "addControl": "Dodaj kontrolni broj"
+    "addControl": "Dodaj kontrolni broj",
+    "editorHint": "Kliknite polje na nalogu i kucajte",
+    "preview": "Pregled",
+    "script": "Pismo",
+    "payment": "Šta plaćate"
   },
   "slip": {
     "payer": "Uplatilac",
@@ -36,6 +41,8 @@
     "amount": "Iznos",
     "paymentCode": "Šifra plaćanja",
     "model": "Model",
+    "modelDebit": "Model (zaduženje)",
+    "modelCredit": "Model (odobrenje)",
     "reference": "Poziv na broj",
     "referenceCredit": "Poziv na broj (odobrenje)",
     "referenceDebit": "Model i poziv na broj (zaduženje)",
@@ -75,7 +82,8 @@
     "layout": {
       "lines": "Na nalogu staju najviše 3 reda, ostali se ne vide",
       "wide": "Red je predugačak za polje na nalogu (staje oko 55 slova, velikih oko 43), kraj će biti odsečen"
-    }
+    },
+    "summary": "Proverite polja"
   },
   "actions": {
     "clear": "Očisti",
@@ -147,7 +155,9 @@
     "codes": "Šifre plaćanja",
     "model97": "Model 97",
     "checkQr": "Provera IPS QR",
-    "checkAccount": "Provera računa"
+    "checkAccount": "Provera računa",
+    "skip": "Pređi na sadržaj",
+    "languages": "Jezik"
   },
   "share": {
     "title": "Uplatnica",
@@ -247,7 +257,8 @@
     },
     "payAt": "Plati na portalu {portal}",
     "fees": "Takse od {date}",
-    "blank": "prazna uplatnica"
+    "blank": "prazna uplatnica",
+    "more": "Ostali gotovi nalozi"
   },
   "codesPage": {
     "metaTitle": "Šifre plaćanja: kompletna lista sa objašnjenjima (189, 289, 253…)",
@@ -314,7 +325,8 @@
     "download": "Preuzmi PDF ({n})",
     "building": "Pravim PDF…",
     "clear": "isprazni paket",
-    "delete": "ukloni"
+    "delete": "ukloni",
+    "item": "nalog {n}"
   },
   "flash": {
     "copied": "IPS tekst je kopiran.",

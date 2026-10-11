@@ -41,5 +41,5 @@ const [year, month] = props.template.checkedAt.split('-')
 </template>
 
 <style scoped>
-.checked { font-size: 13px; }
+.checked { font-size: var(--fs-xs); color: var(--text-muted); }
 </style>

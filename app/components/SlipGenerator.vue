@@ -41,34 +41,55 @@ function onDecoded(payload: string) {
 </script>
 
 <template>
-  <section class="generator">
-    <p class="options no-print">
-      <span>
+  <section
+    class="panel generator"
+    :aria-label="t('nav.generator')"
+  >
+    <div class="head no-print">
+      <fieldset class="choice segmented kind">
+        <legend class="sr-only">
+          {{ t('form.kind') }}
+        </legend>
         <label><input
           v-model="form.kind"
           type="radio"
+          class="sr-only"
+          name="slip-kind"
           value="uplata"
           @change="onKind('uplata')"
-        > {{ t('kinds.uplata.title') }}</label>
+        ><span>{{ t('kinds.uplata.title') }}</span></label>
         <label><input
           v-model="form.kind"
           type="radio"
+          class="sr-only"
+          name="slip-kind"
           value="prenos"
           @change="onKind('prenos')"
-        > {{ t('kinds.prenos.title') }}</label>
-      </span>
-      <span>
+        ><span>{{ t('kinds.prenos.title') }}</span></label>
+      </fieldset>
+      <fieldset class="choice segmented script">
+        <legend class="sr-only">
+          {{ t('form.script') }}
+        </legend>
         <label><input
           v-model="script"
           type="radio"
+          class="sr-only"
+          name="slip-script"
           value="latn"
-        > latinica</label>
+        ><span lang="sr-Latn">latinica</span></label>
         <label><input
           v-model="script"
           type="radio"
+          class="sr-only"
+          name="slip-script"
           value="cyrl"
-        > ћирилица</label>
-      </span>
+        ><span lang="sr-Cyrl">ћирилица</span></label>
+      </fieldset>
+    </div>
+
+    <p class="hint wide-only no-print">
+      {{ t('form.editorHint') }}
     </p>
 
     <p
@@ -81,24 +102,29 @@ function onDecoded(payload: string) {
 
     <SlipEditor class="wide-only no-print" />
     <SlipForm class="narrow-only no-print" />
+    <h3 class="preview-title narrow-only no-print">
+      {{ t('form.preview') }}
+    </h3>
     <SlipPreview class="print-area narrow-only" />
 
     <SlipErrors class="no-print" />
     <SlipActions
       class="no-print"
+      :import-open="showImport"
       @import="showImport = !showImport"
     />
 
     <div
       v-if="showImport"
-      class="no-print"
+      class="card import no-print"
     >
       <QrImport @decoded="onDecoded" />
       <p
         v-if="importError"
+        class="verdict bad"
         role="alert"
       >
-        {{ t('import.notIps') }}
+        ✕ {{ t('import.notIps') }}
       </p>
     </div>
 
@@ -107,11 +133,20 @@ function onDecoded(payload: string) {
 </template>
 
 <style scoped>
-.generator { display: grid; gap: 12px; max-width: 900px; }
-.options { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 32px; }
-.options span { display: flex; gap: 16px; }
-.options label { display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
-.options input { margin: 0; }
-.note { margin: 0; padding: 6px 10px; border: 1px solid #000; }
-
+.generator { display: grid; gap: var(--s-4); }
+.generator > * { margin: 0; min-width: 0; }
+.head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s-3) var(--s-4); }
+.kind { width: max-content; min-width: 360px; }
+.script { width: max-content; }
+.script label { min-height: 32px; padding: 2px 10px; font-size: var(--fs-sm); }
+.hint { font-size: var(--fs-sm); color: var(--text-muted); margin-top: calc(-1 * var(--s-2)) !important; }
+.preview-title { font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--text-muted); margin-bottom: calc(-1 * var(--s-2)) !important; }
+.import { display: grid; gap: var(--s-3); }
+.import .verdict { margin: 0; }
+@media (max-width: 1199.98px) { .generator { padding: var(--s-4); } }
+@media (pointer: coarse), (max-width: 959.98px) { .script label { min-height: 44px; } }
+@media (max-width: 599.98px) {
+  .generator { margin-inline: calc(-1 * var(--gutter)); border-inline: 0; border-radius: 0; padding: var(--s-4); }
+  .kind, .script { width: 100%; min-width: 0; }
+}
 </style>

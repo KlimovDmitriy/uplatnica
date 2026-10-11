@@ -19,9 +19,10 @@ const open = ref(false)
 </script>
 
 <template>
+  <!-- The tools bring their own cards, so the open tool is not wrapped in another one. -->
   <section
     v-if="focus"
-    class="tool focus"
+    class="tool"
   >
     <component :is="is" />
   </section>
@@ -32,21 +33,25 @@ const open = ref(false)
     @toggle="open = ($event.target as HTMLDetailsElement).open"
   >
     <summary>
-      <h2>{{ t(`${tool.prefix}.title`) }}</h2>
+      <!-- A real <h2> inside <summary> loses its heading role in screen readers. -->
+      <span
+        class="title"
+        role="heading"
+        aria-level="2"
+      >{{ t(`${tool.prefix}.title`) }}</span>
     </summary>
-    <p class="lead">
-      {{ t(`${tool.prefix}.lead`) }}
-    </p>
-    <component
-      :is="is"
-      v-if="open"
-    />
+    <div class="tool-body">
+      <p class="lead">
+        {{ t(`${tool.prefix}.lead`) }}
+      </p>
+      <component
+        :is="is"
+        v-if="open"
+      />
+    </div>
   </details>
 </template>
 
 <style scoped>
-details.tool { border-top: 1px solid var(--border); padding: 10px 0; }
-summary { cursor: pointer; }
-summary h2 { display: inline; font-size: 17px; margin: 0; }
-.lead { color: var(--muted); font-size: 14px; }
+.tool-body .lead { font-size: var(--fs-md); }
 </style>

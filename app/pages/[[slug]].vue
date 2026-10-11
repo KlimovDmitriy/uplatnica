@@ -55,13 +55,29 @@ useSchemaOrg([
 <template>
   <div class="container page">
     <header class="no-print intro">
+      <p
+        v-if="template"
+        class="back"
+      >
+        <LangLink to="/">
+          ← {{ t('templatesPage.blank') }}
+        </LangLink>
+      </p>
       <h1>{{ title() }}</h1>
-      <p v-if="tool">
+      <p
+        v-if="tool"
+        class="lead"
+      >
         {{ t(`${tool.prefix}.lead`) }}
       </p>
-      <p v-else-if="!template">
-        {{ t('hero.lead') }}
-      </p>
+      <template v-else-if="!template">
+        <p class="lead">
+          {{ t('hero.lead') }}
+        </p>
+        <p class="blank">
+          <a href="#generator">{{ t('hero.blankLink') }}</a>
+        </p>
+      </template>
     </header>
 
     <ToolSection
@@ -72,8 +88,8 @@ useSchemaOrg([
     />
 
     <TemplatePicker
+      v-if="!template"
       class="no-print"
-      :current="template?.slug"
     />
 
     <TemplateDetails
@@ -96,7 +112,14 @@ useSchemaOrg([
       :template="template"
     />
 
-    <div class="no-print">
+    <TemplatePicker
+      v-if="template"
+      class="no-print"
+      :current="template.slug"
+      more
+    />
+
+    <div class="tools card no-print">
       <ToolSection
         v-for="other in TOOLS.filter(x => x !== tool)"
         :key="other.slug"
@@ -113,8 +136,9 @@ useSchemaOrg([
 </template>
 
 <style scoped>
-.page { display: grid; gap: 16px; }
-.intro { padding-top: 16px; }
-.intro h1 { margin-bottom: 4px; }
-.intro p { color: #444; margin: 0; }
+.intro > :last-child { margin-bottom: 0; }
+.intro .lead { margin: 0; }
+.back { margin: 0 0 var(--s-2); font-size: var(--fs-sm); }
+.blank { margin: var(--s-3) 0 0; }
+.back a, .blank a { display: inline-flex; align-items: center; min-height: 24px; }
 </style>

@@ -28,14 +28,16 @@ defineProps<{
     <slot />
     <p
       v-if="error"
-      class="msg error"
+      :id="`${id}-error`"
+      class="error-text"
       role="alert"
     >
       ✕ {{ error }}
     </p>
     <p
       v-else-if="hint"
-      class="msg"
+      :id="`${id}-hint`"
+      class="hint"
     >
       {{ hint }}
     </p>
@@ -43,12 +45,8 @@ defineProps<{
 </template>
 
 <style scoped>
-.field { display: grid; gap: 6px; align-content: start; min-width: 0; }
-.head { display: flex; justify-content: space-between; gap: 8px; }
-label { font-weight: 500; font-size: 14px; }
-.req { color: var(--muted); }
-.counter { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
-.msg { margin: 0; font-size: 12.5px; color: var(--muted); }
-.msg.error { color: var(--text); font-weight: 500; }
-.invalid :slotted(input), .invalid :slotted(textarea) { border-color: var(--text); }
+.head { display: flex; justify-content: space-between; gap: var(--s-2); }
+.req, .counter { color: var(--text-muted); font-weight: var(--fw-regular); }
+.counter { font-size: var(--fs-xs); font-variant-numeric: tabular-nums; }
+.invalid :slotted(input), .invalid :slotted(textarea) { border-color: var(--error); }
 </style>

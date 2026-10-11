@@ -7,6 +7,11 @@ const donate = ref<{ open: () => void }>()
 
 <template>
   <div>
+    <a
+      href="#main"
+      class="skip-link no-print"
+    >{{ t('nav.skip') }}</a>
+
     <header class="top no-print">
       <div class="container">
         <LangLink
@@ -19,21 +24,23 @@ const donate = ref<{ open: () => void }>()
       </div>
     </header>
 
-    <main>
+    <main
+      id="main"
+      tabindex="-1"
+    >
       <slot />
     </main>
 
     <footer class="footer no-print">
       <div class="container">
-        <p>
-          <template
-            v-for="(item, i) in TOOLS"
+        <p class="links">
+          <LangLink
+            v-for="item in TOOLS"
             :key="item.slug"
+            :to="`/${item.slug}`"
           >
-            <template v-if="i"> · </template>
-            <LangLink :to="`/${item.slug}`">{{ t(`nav.${item.nav}`) }}</LangLink>
-          </template>
-          ·
+            {{ t(`nav.${item.nav}`) }}
+          </LangLink>
           <button
             type="button"
             class="link"
@@ -42,7 +49,7 @@ const donate = ref<{ open: () => void }>()
             {{ t('donate.button') }}
           </button>
         </p>
-        <p class="small">
+        <p class="disclaimer">
           {{ t('footer.disclaimer') }}
         </p>
       </div>
@@ -53,10 +60,14 @@ const donate = ref<{ open: () => void }>()
 </template>
 
 <style scoped>
-.top { border-bottom: 1px solid #ccc; }
-.top .container { display: flex; justify-content: space-between; align-items: baseline; padding-top: 10px; padding-bottom: 8px; }
-.brand { font-size: 18px; font-weight: 700; text-decoration: none; }
-.footer { border-top: 1px solid #ccc; margin-top: 40px; padding: 12px 0 24px; font-size: 13px; }
-.footer p { margin: 0 0 4px; }
-.small { color: #777; font-size: 12px; }
+.top { border-bottom: 1px solid var(--border); background: var(--surface); }
+.top .container { display: flex; justify-content: space-between; align-items: center; gap: var(--s-4); min-height: 56px; }
+.brand { font-size: var(--fs-lg); font-weight: var(--fw-semibold); color: var(--text); text-decoration: none; }
+.brand:hover { color: var(--text); }
+main:focus { outline: none; }
+.footer { margin-top: var(--s-8); border-top: 1px solid var(--border); padding: var(--s-5) 0 var(--s-6); font-size: var(--fs-sm); }
+.links { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); margin: 0 0 var(--s-3); }
+.links > * { display: inline-flex; align-items: center; min-height: 24px; }
+.disclaimer { margin: 0; max-width: var(--measure); font-size: var(--fs-xs); color: var(--text-muted); }
+@media (max-width: 599.98px) { .footer { margin-top: var(--s-7); } }
 </style>

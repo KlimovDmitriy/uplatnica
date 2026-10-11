@@ -29,6 +29,9 @@ const expected = computed(() => {
         <input
           id="acc"
           v-model="input"
+          class="mono"
+          :aria-invalid="input.trim() && !valid ? 'true' : undefined"
+          :aria-describedby="input.trim() && !valid ? 'acc-verdict acc-hint' : 'acc-hint'"
           type="text"
           inputmode="numeric"
           placeholder="160-5100000000-02"
@@ -36,38 +39,40 @@ const expected = computed(() => {
       </FormField>
 
       <div
-        v-if="input.trim()"
         class="result"
         aria-live="polite"
       >
-        <p
-          class="verdict"
-          :class="valid ? 'ok' : 'bad'"
-        >
-          <template v-if="!account">
-            {{ t('errors.account.invalid') }}
-          </template>
-          <template v-else-if="valid">
-            ✓ {{ t('accountPage.valid') }}
-          </template>
-          <template v-else>
-            ✕ {{ t('accountPage.invalid', { control: expected }) }}
-          </template>
-        </p>
-        <dl>
-          <template v-if="account">
-            <dt>{{ t('accountPage.full') }}</dt>
-            <dd class="mono">
-              {{ formatAccount(account) }}
-            </dd>
-            <dt>{{ t('accountPage.digits') }}</dt>
-            <dd class="mono">
-              {{ account }}
-            </dd>
-          </template>
-          <dt>{{ t('accountPage.bank') }}</dt>
-          <dd>{{ bank?.name ?? t('accountPage.unknownBank') }}</dd>
-        </dl>
+        <template v-if="input.trim()">
+          <p
+            id="acc-verdict"
+            class="verdict"
+            :class="valid ? 'ok' : 'bad'"
+          >
+            <template v-if="!account">
+              ✕ {{ t('errors.account.invalid') }}
+            </template>
+            <template v-else-if="valid">
+              ✓ {{ t('accountPage.valid') }}
+            </template>
+            <template v-else>
+              ✕ {{ t('accountPage.invalid', { control: expected }) }}
+            </template>
+          </p>
+          <dl>
+            <template v-if="account">
+              <dt>{{ t('accountPage.full') }}</dt>
+              <dd class="mono">
+                {{ formatAccount(account) }}
+              </dd>
+              <dt>{{ t('accountPage.digits') }}</dt>
+              <dd class="mono">
+                {{ account }}
+              </dd>
+            </template>
+            <dt>{{ t('accountPage.bank') }}</dt>
+            <dd>{{ bank?.name ?? t('accountPage.unknownBank') }}</dd>
+          </dl>
+        </template>
       </div>
     </section>
 
@@ -76,19 +81,21 @@ const expected = computed(() => {
       class="banks"
     >
       <h2>{{ t('accountPage.banksTitle') }}</h2>
-      <table>
-        <tbody>
-          <tr
-            v-for="b in BANK_CODES"
-            :key="b.code"
-          >
-            <td class="mono">
-              {{ b.code }}
-            </td>
-            <td>{{ b.name }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-scroll">
+        <table class="table">
+          <tbody>
+            <tr
+              v-for="b in BANK_CODES"
+              :key="b.code"
+            >
+              <td class="mono code">
+                {{ b.code }}
+              </td>
+              <td>{{ b.name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <article class="prose">
@@ -105,14 +112,16 @@ const expected = computed(() => {
 </template>
 
 <style scoped>
-.tool { margin-top: 24px; display: grid; gap: 16px; }
-.verdict { margin: 0 0 12px; padding: 10px 12px; border-radius: 4px; font-weight: 600; }
+.result { display: grid; gap: var(--s-3); }
+.result:not(:empty) { margin-top: var(--s-4); }
 dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; }
-dt { color: var(--muted); font-size: 14px; }
-dd { margin: 0; }
-.banks { margin-top: 40px; }
-.banks h2 { font-size: 20px; margin: 0 0 12px; }
-table { width: 100%; border-collapse: collapse; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; font-size: 14.5px; }
-td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
-td.mono { width: 64px; }
+dt { color: var(--text-muted); font-size: var(--fs-sm); }
+dd { margin: 0; overflow-wrap: anywhere; }
+.banks { margin: var(--s-6) 0; }
+.banks h2 { font-size: var(--fs-lg); }
+td.code { width: 64px; }
+@media (max-width: 599.98px) {
+  dl { grid-template-columns: 1fr; gap: 2px; }
+  dd + dt { margin-top: var(--s-2); }
+}
 </style>

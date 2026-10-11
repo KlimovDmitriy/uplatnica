@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** Template intro, official portal, fees, payment tabs and reference hints; the chosen payment is v-model. */
+/** Template intro, official portal, fees, payment choice and reference hints; the chosen payment is v-model. */
 import type { PaymentTemplate } from '~/data/templates'
 
 const props = defineProps<{ template: PaymentTemplate }>()
@@ -24,46 +24,56 @@ const rsd = (n: number) => `${n.toLocaleString('sr-RS')} RSD`
         :href="template.officialPay.url"
         target="_blank"
         rel="noopener"
-        class="btn primary"
+        class="btn"
+        :class="{ primary: template.payments.length === 0 }"
       >{{ t('templatesPage.payAt', { portal: template.officialPay.label }) }} ↗</a>
     </p>
 
-    <table
-      v-if="template.fees?.length"
-      class="fees"
-    >
-      <caption>{{ t('templatesPage.fees', { date: feesFrom }) }}</caption>
-      <tbody>
-        <tr
-          v-for="(f, i) in template.fees"
-          :key="i"
-        >
-          <td>{{ l(f.label) }}</td>
-          <td class="mono">
-            {{ rsd(f.amount) }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
     <div
-      v-if="template.payments.length > 1"
-      class="payments"
-      role="tablist"
+      v-if="template.fees?.length"
+      class="table-scroll"
     >
-      <button
-        v-for="(p, i) in template.payments"
-        :key="p.id"
-        type="button"
-        role="tab"
-        :aria-selected="active === p.id"
-        @click="active = p.id"
-      >
-        {{ i + 1 }}. {{ l(p.label) }}
-      </button>
+      <table class="table fees">
+        <caption>{{ t('templatesPage.fees', { date: feesFrom }) }}</caption>
+        <tbody>
+          <tr
+            v-for="(f, i) in template.fees"
+            :key="i"
+          >
+            <td>{{ l(f.label) }}</td>
+            <td class="num">
+              {{ rsd(f.amount) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <template v-if="payment">
+    <fieldset
+      v-if="template.payments.length > 1"
+      class="choice pills"
+    >
+      <legend>{{ t('form.payment') }}</legend>
+      <label
+        v-for="(p, i) in template.payments"
+        :key="p.id"
+        class="chip"
+      >
+        <input
+          v-model="active"
+          type="radio"
+          class="sr-only"
+          name="template-payment"
+          :value="p.id"
+        >
+        {{ i + 1 }}. {{ l(p.label) }}
+      </label>
+    </fieldset>
+
+    <div
+      v-if="payment && (payment.referenceHint || payment.amountNote || payment.referenceTool === 'rat')"
+      class="note neutral"
+    >
       <dl
         v-if="payment.referenceHint || payment.amountNote"
         class="hints"
@@ -78,24 +88,19 @@ const rsd = (n: number) => `${n.toLocaleString('sr-RS')} RSD`
         </template>
       </dl>
       <RatReference v-if="payment.referenceTool === 'rat'" />
-    </template>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.details { display: grid; gap: 14px; }
+.details { display: grid; gap: var(--s-4); }
 .details > * { margin: 0; }
-.fees { border-collapse: collapse; width: 100%; max-width: 600px; font-size: 14.5px; }
-.fees caption { text-align: left; color: var(--muted); font-size: 13px; padding-bottom: 6px; }
-.fees td { padding: 6px 0; border-bottom: 1px solid var(--border); }
-.fees td.mono { text-align: right; white-space: nowrap; }
-.payments { display: flex; flex-wrap: wrap; gap: 4px 20px; border-bottom: 1px solid var(--border); }
-.payments button {
-  border: 0; background: none; font: inherit; font-size: 14px; color: var(--muted); cursor: pointer;
-  padding: 0 0 8px; margin-bottom: -1px; border-bottom: 2px solid transparent;
-}
-.payments button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--text); }
-.hints { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; font-size: 14px; }
-.hints dt { color: var(--muted); }
+.fees { max-width: 640px; }
+.hints { display: grid; grid-template-columns: max-content 1fr; gap: var(--s-2) var(--s-4); margin: 0; font-size: var(--fs-sm); }
+.hints dt { color: var(--text-muted); font-weight: var(--fw-semibold); }
 .hints dd { margin: 0; }
+@media (max-width: 599.98px) {
+  .hints { grid-template-columns: 1fr; gap: 2px; }
+  .hints dd + dt { margin-top: var(--s-2); }
+}
 </style>

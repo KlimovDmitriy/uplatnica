@@ -50,6 +50,7 @@ function openInGenerator() {
         <textarea
           id="ips-text"
           v-model="payload"
+          class="mono"
           rows="4"
           spellcheck="false"
           placeholder="K:PR|V:01|C:1|R:845000000040484987|N:JP EPS BEOGRAD|I:RSD3596,13|SF:189|RO:97163220000111111111000"
@@ -57,44 +58,52 @@ function openInGenerator() {
       </FormField>
     </section>
 
-    <section
-      v-if="parsed"
-      class="card report"
+    <!-- Only the verdict is live: the tag table would be re-read on every keystroke. -->
+    <div
+      class="live"
       aria-live="polite"
     >
       <p
+        v-if="parsed"
         class="verdict"
         :class="valid ? 'ok' : 'bad'"
       >
         {{ valid ? `✓ ${t('checkQr.valid')}` : `✕ ${t('checkQr.invalid')}` }}
       </p>
-      <table>
-        <thead>
-          <tr>
-            <th>{{ t('checkQr.tag') }}</th>
-            <th>{{ t('checkQr.value') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="([tag, value], i) in parsed.tags"
-            :key="i"
-            :class="{ problem: tagProblem(tag) }"
-          >
-            <td>
-              <b class="mono">{{ tag }}</b>
-              <small>{{ t(`checkQr.tags.${tag}`, tag) }}</small>
-            </td>
-            <td>
-              <span class="value">{{ value }}</span>
-              <small
-                v-if="tagProblem(tag)"
-                class="err"
-              >{{ tagProblem(tag) }}</small>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    </div>
+    <section
+      v-if="parsed"
+      class="card report"
+    >
+      <div class="table-scroll">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{{ t('checkQr.tag') }}</th>
+              <th>{{ t('checkQr.value') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="([tag, value], i) in parsed.tags"
+              :key="i"
+              :class="{ problem: tagProblem(tag) }"
+            >
+              <td>
+                <b class="mono">{{ tag }}</b>
+                <small>{{ t(`checkQr.tags.${tag}`, tag) }}</small>
+              </td>
+              <td>
+                <span class="value">{{ value }}</span>
+                <small
+                  v-if="tagProblem(tag)"
+                  class="err"
+                >{{ tagProblem(tag) }}</small>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <button
         type="button"
         class="btn primary"
@@ -113,15 +122,15 @@ function openInGenerator() {
 </template>
 
 <style scoped>
-.input { display: grid; gap: 16px; margin-top: 24px; }
-.report { margin-top: 16px; display: grid; gap: 14px; justify-items: start; }
-.verdict { margin: 0; padding: 10px 12px; border-radius: 4px; font-weight: 600; justify-self: stretch; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th { text-align: left; color: var(--muted); font-weight: 500; font-size: 13px; padding: 6px 8px; border-bottom: 1px solid var(--border); }
-td { padding: 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.input { display: grid; gap: var(--s-4); }
+.live:not(:empty) { margin-top: var(--s-4); }
+.report { margin-top: var(--s-3); display: grid; gap: var(--s-4); justify-items: start; }
+.report > * { margin: 0; }
+.report .table-scroll { justify-self: stretch; }
 td:first-child { width: 34%; }
-td small { display: block; color: var(--muted); font-size: 12.5px; }
+td small { display: block; color: var(--text-muted); font-size: var(--fs-xs); }
 .value { white-space: pre-wrap; overflow-wrap: anywhere; }
-tr.problem td { font-weight: 600; }
-.err { color: var(--text) !important; }
+tr.problem td { font-weight: var(--fw-semibold); }
+.err { color: var(--error) !important; }
+.prose { margin-top: var(--s-6); }
 </style>

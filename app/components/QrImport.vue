@@ -135,25 +135,26 @@ onBeforeUnmount(() => {
     />
     <p
       v-if="status === 'notFound'"
-      class="hint error"
+      class="verdict bad"
       role="alert"
     >
-      {{ t('import.notFound') }}
+      ✕ {{ t('import.notFound') }}
     </p>
     <p
       v-if="status === 'noCamera'"
-      class="hint error"
+      class="verdict bad"
       role="alert"
     >
-      {{ t('import.noCamera') }}
+      ✕ {{ t('import.noCamera') }}
     </p>
   </div>
 </template>
 
 <style scoped>
-.qr-import { display: grid; gap: 8px; }
-.buttons { display: flex; flex-wrap: wrap; gap: 8px; }
-.hint { margin: 0; font-size: 13px; color: var(--muted); }
-.hint.error { color: var(--text); }
-.camera { width: 100%; max-width: 420px; border-radius: 4px; background: #000; }
+.qr-import { display: grid; gap: var(--s-3); }
+.qr-import > * { margin: 0; }
+.buttons { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+.buttons label.btn:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: 2px; }
+.hint { font-size: var(--fs-xs); color: var(--text-muted); }
+.camera { width: 100%; max-width: 420px; border-radius: var(--r-sm); background: var(--text); }
 </style>

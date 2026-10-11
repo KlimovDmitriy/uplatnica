@@ -6,7 +6,8 @@
   },
   "hero": {
     "title": "Serbian payment slip with IPS QR code",
-    "lead": "Fill in the slip right on the form, then print it or download a PDF. Add several slips to a batch to get them in one file."
+    "lead": "Fill in the slip right on the form, then print it or download a PDF. Add several slips to a batch to get them in one file.",
+    "blankLink": "Fill in a blank slip ↓"
   },
   "kinds": {
     "uplata": {
@@ -21,7 +22,11 @@
     "payerPlaceholder": "Petar Petrović\nKneza Miloša 10\nBeograd",
     "payeePlaceholder": "Recipient name\nStreet, city",
     "accountHint": "18 digits, with or without dashes: 160-5100000000-02",
-    "addControl": "Add check digits"
+    "addControl": "Add check digits",
+    "editorHint": "Click a field on the slip and type",
+    "preview": "Preview",
+    "script": "Script",
+    "payment": "What are you paying"
   },
   "slip": {
     "payer": "Payer (uplatilac)",
@@ -36,6 +41,8 @@
     "amount": "Amount",
     "paymentCode": "Payment code",
     "model": "Model",
+    "modelDebit": "Model (debit)",
+    "modelCredit": "Model (credit)",
     "reference": "Reference number",
     "referenceCredit": "Reference number (credit)",
     "referenceDebit": "Model and reference (debit)",
@@ -75,7 +82,8 @@
     "layout": {
       "lines": "The slip fits 3 lines at most, the rest will not be visible",
       "wide": "A line is too long for the box on the slip (about 55 lowercase letters or 43 capitals fit), its end will be cut off"
-    }
+    },
+    "summary": "Check these fields"
   },
   "actions": {
     "clear": "Clear",
@@ -147,7 +155,9 @@
     "codes": "Payment codes",
     "model97": "Model 97",
     "checkQr": "Check IPS QR",
-    "checkAccount": "Check account"
+    "checkAccount": "Check account",
+    "skip": "Skip to content",
+    "languages": "Language"
   },
   "share": {
     "title": "Payment slip",
@@ -247,7 +257,8 @@
     },
     "payAt": "Pay on {portal}",
     "fees": "Fees from {date}",
-    "blank": "blank slip"
+    "blank": "blank slip",
+    "more": "Other ready-made slips"
   },
   "codesPage": {
     "metaTitle": "Serbian payment codes (šifra plaćanja): full list with meanings",
@@ -314,7 +325,8 @@
     "download": "Download PDF ({n})",
     "building": "Building PDF…",
     "clear": "empty batch",
-    "delete": "remove"
+    "delete": "remove",
+    "item": "slip {n}"
   },
   "flash": {
     "copied": "IPS text copied.",

@@ -49,7 +49,9 @@ watch(reference, r => write(r ? { model: '97', reference: r } : {}))
       <input
         id="rat-jbkjs"
         v-model="jbkjs"
+        class="mono"
         inputmode="numeric"
+        aria-describedby="rat-jbkjs-hint"
         maxlength="5"
         placeholder="09852"
       >
@@ -64,7 +66,7 @@ watch(reference, r => write(r ? { model: '97', reference: r } : {}))
 </template>
 
 <style scoped>
-.rat { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
-.result { grid-column: 1 / -1; margin: 0; font-size: 14px; }
-@media (max-width: 640px) { .rat { grid-template-columns: 1fr; } }
+.rat { display: grid; gap: var(--s-3) var(--s-4); }
+.result { grid-column: 1 / -1; margin: 0; font-size: var(--fs-sm); }
+@media (min-width: 960px) { .rat { grid-template-columns: 1fr 1fr; } }
 </style>

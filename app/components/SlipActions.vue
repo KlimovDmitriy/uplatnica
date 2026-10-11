@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import QRCode from 'qrcode'
 
+defineProps<{ importOpen?: boolean }>()
 const emit = defineEmits<{ import: [] }>()
 const { t } = useI18n()
 const { form, script, ipsString, shareUrl, reset } = useSlip()
@@ -54,7 +55,15 @@ async function share() {
 
 <template>
   <div class="actions">
-    <p class="buttons">
+    <div class="buttons">
+      <button
+        type="button"
+        class="btn primary pdf"
+        :disabled="busy"
+        @click="pdf"
+      >
+        {{ t('actions.pdf') }}
+      </button>
       <button
         type="button"
         class="btn"
@@ -65,14 +74,13 @@ async function share() {
       <button
         type="button"
         class="btn"
-        :disabled="busy"
-        @click="pdf"
+        @click="share"
       >
-        {{ t('actions.pdf') }}
+        {{ t('share.copyLink') }}
       </button>
       <button
         type="button"
-        class="btn"
+        class="btn add"
         :disabled="full && !editing"
         @click="addToBatch"
       >
@@ -81,56 +89,59 @@ async function share() {
         </template>
       </button>
       <span
-        v-if="flash"
         class="flash"
         role="status"
-      >{{ flash }}</span>
-    </p>
-    <p class="links">
+      ><template v-if="flash">✓ {{ flash }}</template></span>
+    </div>
+    <div class="quiet">
       <button
         type="button"
-        class="link"
+        class="btn quiet small"
         :disabled="!ipsString"
         @click="downloadQr"
       >
         {{ t('actions.downloadQr') }}
-      </button> ·
+      </button>
       <button
         type="button"
-        class="link"
+        class="btn quiet small"
         :disabled="!ipsString"
         @click="copyPayload"
       >
         {{ t('actions.copyIps') }}
-      </button> ·
+      </button>
       <button
         type="button"
-        class="link"
-        @click="share"
-      >
-        {{ t('share.copyLink') }}
-      </button> ·
-      <button
-        type="button"
-        class="link"
+        class="btn quiet small"
+        :aria-expanded="importOpen"
         @click="emit('import')"
       >
         {{ t('import.title') }}
-      </button> ·
+      </button>
       <button
         type="button"
-        class="link"
+        class="btn quiet small clear"
         @click="reset"
       >
         {{ t('actions.clear') }}
       </button>
-    </p>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.actions p { margin: 0; }
-.buttons { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.links { margin-top: 8px !important; font-size: 13px; color: #777; }
-.flash { font-size: 13px; margin-left: 6px; }
+.actions { display: grid; gap: var(--s-3); }
+.buttons { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; }
+/* The live region stays in the DOM (an element added together with its text is often not announced). */
+.flash:empty { position: absolute; }
+.flash { margin-left: var(--s-2); }
+.quiet { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-2); }
+@media (min-width: 600px) { .quiet { margin-inline: -10px; } }
+.quiet .clear { margin-left: auto; color: var(--text-muted); }
+.quiet .clear:hover { color: var(--text); }
+@media (max-width: 599.98px) {
+  .buttons { display: grid; grid-template-columns: 1fr 1fr; }
+  .pdf, .add, .flash { grid-column: 1 / -1; }
+  .flash { margin-left: 0; }
+}
 </style>

@@ -32,7 +32,8 @@ const rows = computed(() => {
       :aria-label="t('codesPage.search')"
     >
 
-    <table class="codes">
+    <div class="table-scroll">
+      <table class="table codes">
       <thead>
         <tr>
           <th>{{ t('codesPage.nonCashShort') }}</th>
@@ -45,16 +46,17 @@ const rows = computed(() => {
           v-for="c in rows"
           :key="c.base"
         >
-          <td class="mono">
+          <td class="mono code">
             <b>2{{ c.base }}</b>
           </td>
-          <td class="mono muted">
+          <td class="mono code muted">
             1{{ c.base }}
           </td>
           <td>{{ l(c.label) }}</td>
         </tr>
       </tbody>
-    </table>
+      </table>
+    </div>
     <p
       v-if="!rows.length"
       class="muted"
@@ -83,13 +85,10 @@ const rows = computed(() => {
 </template>
 
 <style scoped>
-.legend { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 20px 0 16px; font-size: 14px; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 0 0 var(--s-4); font-size: var(--fs-sm); color: var(--text-muted); }
 .legend b { color: var(--text); }
-.search { margin-bottom: 8px; }
-.codes { width: 100%; border-collapse: collapse; font-size: 14.5px; }
-.codes th, .codes td { padding: 8px 10px 8px 0; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
-.codes thead th { font-size: 13px; font-weight: 500; color: var(--muted); }
-.codes td.mono { width: 64px; white-space: nowrap; }
-.source { font-size: 13px; margin-top: 12px; }
-.source a { color: var(--muted); }
+.search { margin-bottom: var(--s-3); }
+.codes td.code { width: 64px; white-space: nowrap; }
+.source { font-size: var(--fs-sm); margin: var(--s-3) 0 var(--s-6); }
+.source a { display: inline-flex; align-items: center; min-height: 24px; color: var(--text-muted); }
 </style>

@@ -5,10 +5,14 @@ import { PAYMENT_CODES } from '~/data/paymentCodes'
 
 const { t } = useI18n()
 const l = useLocalized()
-const { form, fieldError } = useSlip()
+const { form } = useSlip()
+const { problemFor } = useSlipProblems()
 
 const isPrenos = computed(() => form.value.kind === 'prenos')
-const invalid = (f: keyof SlipForm) => !!fieldError(f)
+const label = (f: keyof SlipForm) => t(slipFieldLabel(f, form.value.kind))
+/** aria-invalid / aria-describedby: present only on fields listed in the error summary. */
+const invalid = (f: keyof SlipForm) => (problemFor(f) ? 'true' : undefined)
+const describedBy = (f: keyof SlipForm) => (problemFor(f) ? slipErrorId(f) : undefined)
 </script>
 
 <template>
@@ -17,76 +21,117 @@ const invalid = (f: keyof SlipForm) => !!fieldError(f)
     novalidate
     @submit.prevent
   >
-    <label>{{ t(isPrenos ? 'slip.debtor' : 'slip.payer') }}
+    <label class="field">{{ label('payer') }}
       <textarea
+        id="f-payer"
         v-model="form.payer"
         rows="3"
-        :class="{ invalid: invalid('payer') }"
+        enterkeyhint="next"
+        :aria-invalid="invalid('payer')"
+        :aria-describedby="describedBy('payer')"
       /></label>
-    <label>{{ t(isPrenos ? 'slip.purposeTransfer' : 'slip.purpose') }}
+    <label class="field">{{ label('purpose') }}
       <input
+        id="f-purpose"
         v-model="form.purpose"
-        :class="{ invalid: invalid('purpose') }"
+        enterkeyhint="next"
+        :aria-invalid="invalid('purpose')"
+        :aria-describedby="describedBy('purpose')"
       ></label>
-    <label>{{ t(isPrenos ? 'slip.creditor' : 'slip.payee') }}
+    <label class="field">{{ label('payee') }}
       <textarea
+        id="f-payee"
         v-model="form.payee"
         rows="3"
-        :class="{ invalid: invalid('payee') }"
+        enterkeyhint="next"
+        :aria-invalid="invalid('payee')"
+        :aria-describedby="describedBy('payee')"
       /></label>
     <div class="row">
-      <label class="code">{{ t('slip.paymentCode') }}
+      <label class="field code">{{ label('paymentCode') }}
         <input
+          id="f-paymentCode"
           v-model="form.paymentCode"
+          class="mono"
           list="form-codes"
           inputmode="numeric"
           maxlength="3"
-          :class="{ invalid: invalid('paymentCode') }"
+          enterkeyhint="next"
+          :aria-invalid="invalid('paymentCode')"
+          :aria-describedby="describedBy('paymentCode')"
         ></label>
-      <label class="grow">{{ t('slip.amount') }}, RSD
+      <label class="field grow">{{ label('amount') }}, RSD
         <input
+          id="f-amount"
           v-model="form.amount"
           inputmode="decimal"
           placeholder="0,00"
-          :class="{ invalid: invalid('amount') }"
+          enterkeyhint="next"
+          :aria-invalid="invalid('amount')"
+          :aria-describedby="describedBy('amount')"
         ></label>
     </div>
     <template v-if="isPrenos">
-      <label>{{ t('slip.debtorAccount') }}
+      <label class="field">{{ label('payerAccount') }}
         <input
+          id="f-payerAccount"
           v-model="form.payerAccount"
+          class="mono"
           inputmode="numeric"
+          enterkeyhint="next"
         ></label>
       <div class="row">
-        <label class="code">{{ t('slip.model') }}
+        <label class="field code">{{ label('debitModel') }}
           <input
+            id="f-debitModel"
             v-model="form.debitModel"
+            class="mono"
             inputmode="numeric"
             maxlength="2"
+            enterkeyhint="next"
           ></label>
-        <label class="grow">{{ t('slip.referenceDebit') }}
-          <input v-model="form.debitReference"></label>
+        <label class="field grow">{{ label('debitReference') }}
+          <input
+            id="f-debitReference"
+            v-model="form.debitReference"
+            class="mono"
+            inputmode="text"
+            enterkeyhint="next"
+          ></label>
       </div>
     </template>
-    <label>{{ t(isPrenos ? 'slip.creditorAccount' : 'slip.payeeAccount') }}
+    <label class="field">{{ label('account') }}
       <input
+        id="f-account"
         v-model="form.account"
+        class="mono"
         inputmode="numeric"
         placeholder="000-0000000000000-00"
-        :class="{ invalid: invalid('account') }"
+        enterkeyhint="next"
+        :aria-invalid="invalid('account')"
+        :aria-describedby="describedBy('account')"
       ></label>
     <div class="row">
-      <label class="code">{{ t('slip.model') }}
+      <label class="field code">{{ label('model') }}
         <input
+          id="f-model"
           v-model="form.model"
+          class="mono"
           inputmode="numeric"
           maxlength="2"
-          :class="{ invalid: invalid('model') }"
+          enterkeyhint="next"
+          :aria-invalid="invalid('model')"
+          :aria-describedby="describedBy('model')"
         ></label>
-      <label class="grow">{{ t(isPrenos ? 'slip.referenceCredit' : 'slip.reference') }}
+      <label class="field grow">{{ label('reference') }}
         <input
+          id="f-reference"
           v-model="form.reference"
-          :class="{ invalid: invalid('reference') }"
+          class="mono"
+          inputmode="text"
+          enterkeyhint="next"
+          :aria-invalid="invalid('reference')"
+          :aria-describedby="describedBy('reference')"
         ></label>
     </div>
     <label
@@ -95,7 +140,7 @@ const invalid = (f: keyof SlipForm) => !!fieldError(f)
     ><input
       v-model="form.urgent"
       type="checkbox"
-    > {{ t('slip.urgent') }}</label>
+    > {{ label('urgent') }}</label>
 
     <datalist id="form-codes">
       <option
@@ -110,11 +155,8 @@ const invalid = (f: keyof SlipForm) => !!fieldError(f)
 </template>
 
 <style scoped>
-.slip-form { display: grid; gap: 10px; }
-label { display: grid; gap: 3px; font-size: 13px; }
-.row { display: flex; gap: 10px; }
-.code { width: 80px; flex: none; }
+.slip-form { display: grid; gap: var(--s-4); max-width: 600px; }
+.row { display: flex; gap: var(--s-3); align-items: end; }
+.code { width: 88px; flex: none; }
 .grow { flex: 1; min-width: 0; }
-.check { display: flex; gap: 6px; align-items: center; }
-.invalid { border-color: #000; outline: 1px solid #000; }
 </style>

@@ -8,11 +8,12 @@ import type { Tool } from '~/data/tools'
 import AccountCheck from './AccountCheck.vue'
 import Model97Tool from './Model97Tool.vue'
 import PaymentCodes from './PaymentCodes.vue'
-import QrCheck from './QrCheck.vue'
 
 const props = defineProps<{ tool: Tool, focus?: boolean }>()
 const { t } = useI18n()
 
+// QrCheck (and jsQR behind it) is fetched only when its tool is shown.
+const QrCheck = defineAsyncComponent(() => import('./QrCheck.vue'))
 const COMPONENTS = { AccountCheck, Model97Tool, PaymentCodes, QrCheck }
 const is = COMPONENTS[props.tool.component]
 const open = ref(false)

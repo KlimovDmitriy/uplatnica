@@ -25,10 +25,14 @@ const payment = computed(() => template?.payments.find(p => p.id === active.valu
 const title = () => (template ? l(template.title) : tool ? t(`${tool.prefix}.title`) : t('hero.title'))
 
 usePageSeo({
-  // "Filled slip with IPS QR" only where there is a slip; portal-only documents keep the plain title.
-  title: () => (template
-    ? template.payments.length ? t('templatesPage.metaTitle', { title: l(template.title) }) : l(template.title)
-    : tool ? t(`${tool.prefix}.metaTitle`) : t('meta.title')),
+  // The "| IPS QR" suffix only where there is a slip (portal-only documents keep the plain title)
+  // and only while the title stays within ~60 characters, which is what search results show.
+  title: () => {
+    if (!template) return tool ? t(`${tool.prefix}.metaTitle`) : t('meta.title')
+    const plain = l(template.title)
+    const full = t('templatesPage.metaTitle', { title: plain })
+    return template.payments.length && full.length <= 60 ? full : plain
+  },
   description: () => (template ? l(template.metaDescription) : tool ? t(`${tool.prefix}.metaDescription`) : t('meta.description')),
   breadcrumb: slug ? [{ name: title }] : undefined,
 })

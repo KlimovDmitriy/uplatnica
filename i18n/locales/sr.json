@@ -1,8 +1,8 @@
 {
   "meta": {
     "appName": "Uplatnica",
-    "title": "Nalog za uplatu sa IPS QR kodom — besplatni generator uplatnice",
-    "description": "Popunite i odštampajte nalog za uplatu ili nalog za prenos sa IPS QR kodom za plaćanje mobilnim bankarstvom. Besplatno, bez registracije, podaci ostaju na vašem uređaju."
+    "title": "Nalog za uplatu sa IPS QR kodom: besplatni generator",
+    "description": "Popunite i odštampajte nalog za uplatu ili prenos sa IPS QR kodom za mobilno bankarstvo. Besplatno, bez registracije, podaci ostaju na vašem uređaju."
   },
   "hero": {
     "title": "Uplatnica sa IPS QR kodom",
@@ -245,7 +245,7 @@
   },
   "templatesPage": {
     "popular": "Gotove uplatnice",
-    "metaTitle": "{title}: popunjen nalog sa IPS QR kodom",
+    "metaTitle": "{title} | IPS QR",
     "notes": "Važno",
     "sources": "Izvori",
     "checked": "Podaci provereni {date}. Iznosi taksi se menjaju, pa pre plaćanja proverite iznos na sajtu institucije.",
@@ -261,8 +261,8 @@
     "more": "Ostali gotovi nalozi"
   },
   "codesPage": {
-    "metaTitle": "Šifre plaćanja: kompletna lista sa objašnjenjima (189, 289, 253…)",
-    "metaDescription": "Sve šifre plaćanja za nalog za uplatu i prenos: šta znače 189, 289, 253, 254, 221 i ostale, kada se koristi 1, a kada 2 na početku. Pretraga po broju i opisu.",
+    "metaTitle": "Šifre plaćanja: lista sa objašnjenjima (189, 289, 253…)",
+    "metaDescription": "Sve šifre plaćanja za nalog za uplatu i prenos: šta znače 189, 289, 253, 254, 221 i kada se koristi 1, a kada 2 na početku. Pretraga po broju.",
     "title": "Šifre plaćanja",
     "lead": "Šifra plaćanja ima tri cifre. Prva je oblik plaćanja, a druge dve osnov plaćanja. Pronađite pravu šifru po broju ili opisu.",
     "cash": "gotovinsko plaćanje (šalter)",
@@ -290,7 +290,7 @@
     "source": "Izvor: Odluka NBS o obrascima platnih naloga, Prilog 3"
   },
   "accountPage": {
-    "metaTitle": "Provera tekućeg računa: kontrolni broj i banka po broju računa",
+    "metaTitle": "Provera tekućeg računa: kontrolni broj i banka",
     "metaDescription": "Proverite da li je broj računa u Srbiji ispravan (kontrolni broj po modulu 97) i kojoj banci pripada. Besplatno, bez slanja podataka.",
     "title": "Provera broja računa",
     "lead": "Unesite broj računa i proverićemo kontrolni broj i banku. Tako ćete uhvatiti grešku u kucanju pre plaćanja.",

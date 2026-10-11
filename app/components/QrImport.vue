@@ -1,9 +1,8 @@
 <script setup lang="ts">
 /**
  * Reads an IPS QR from an image file, a pasted screenshot or the camera.
- * Everything is decoded locally with jsQR.
+ * Everything is decoded locally with jsQR, which is loaded on first use.
  */
-import jsQR from 'jsqr'
 
 const emit = defineEmits<{ decoded: [payload: string] }>()
 const { t } = useI18n()
@@ -13,11 +12,19 @@ const video = ref<HTMLVideoElement>()
 let stream: MediaStream | undefined
 let raf = 0
 
+let jsQR: typeof import('jsqr').default | undefined
+
+async function loadDecoder() {
+  jsQR ??= (await import('jsqr')).default
+}
+
 function decodeImageData(data: ImageData): string | null {
-  return jsQR(data.data, data.width, data.height, { inversionAttempts: 'attemptBoth' })?.data ?? null
+  return jsQR!(data.data, data.width, data.height, { inversionAttempts: 'attemptBoth' })?.data ?? null
 }
 
 async function decodeFile(file: File) {
+  await loadDecoder()
+  await loadDecoder()
   const bitmap = await createImageBitmap(file)
   // Large photos are downscaled: jsQR is faster and just as accurate at ~1600px.
   const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height))
@@ -56,6 +63,7 @@ async function startCamera() {
     return
   }
   status.value = 'scanning'
+  await loadDecoder()
   await nextTick()
   video.value!.srcObject = stream
   await video.value!.play()

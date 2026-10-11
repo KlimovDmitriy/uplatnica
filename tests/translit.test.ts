@@ -10,6 +10,8 @@ describe('toCyrillic', () => {
   it('keeps placeholders, acronyms and urls', () => {
     expect(toCyrillic('Najviše {max} znakova')).toBe('Највише {max} знакова')
     expect(toCyrillic('IPS QR kod, RSD')).toBe('IPS QR код, RSD')
+    expect(toCyrillic('Uplatnica')).toBe('Уплатница')
+    expect(toCyrillic('Uplatnica')).toBe('Уплатница')
     expect(toCyrillic('vidi https://nbs.rs/sr')).toBe('види https://nbs.rs/sr')
   })
 

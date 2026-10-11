@@ -1,8 +1,8 @@
 {
   "meta": {
     "appName": "Uplatnica",
-    "title": "Serbian payment slip generator with IPS QR code (nalog za uplatu)",
-    "description": "Fill in and print a Serbian payment slip (nalog za uplatu or nalog za prenos) with an IPS QR code for mobile banking. Free, no sign-up, your data stays on your device."
+    "title": "Serbian payment slip generator with IPS QR code",
+    "description": "Fill in and print a Serbian payment slip (nalog za uplatu) with an IPS QR code for mobile banking. Free, no sign-up, your data stays on your device."
   },
   "hero": {
     "title": "Serbian payment slip with IPS QR code",
@@ -175,7 +175,7 @@
     "title": "Load from QR code"
   },
   "model97": {
-    "metaTitle": "Model 97 calculator: check digits for Serbian reference numbers",
+    "metaTitle": "Model 97 calculator: check digits for reference numbers",
     "metaDescription": "Compute model 97 check digits for a Serbian payment reference (poziv na broj) and verify an existing one. Free and instant.",
     "title": "Model 97: check digit calculator",
     "lead": "Enter the reference number without check digits and get the full number ready for the slip. Or verify an existing one.",
@@ -212,7 +212,7 @@
     }
   },
   "checkQr": {
-    "metaTitle": "IPS QR checker: read and verify the QR code on a Serbian bill",
+    "metaTitle": "IPS QR checker: read and verify a Serbian bill QR code",
     "metaDescription": "Load an image or scan the IPS QR code on a bill and check the recipient account, amount, payment code and reference before paying.",
     "title": "IPS QR code checker",
     "lead": "Load an image of the QR code from a bill or paste the code text. We show what is inside and whether it follows the NBS standard.",
@@ -245,7 +245,7 @@
   },
   "templatesPage": {
     "popular": "Ready-made slips",
-    "metaTitle": "{title}: filled payment slip with IPS QR code",
+    "metaTitle": "{title} | IPS QR",
     "notes": "Important",
     "sources": "Sources",
     "checked": "Data checked in {date}. Fees change, so check the amount on the institution website before paying.",
@@ -261,8 +261,8 @@
     "more": "Other ready-made slips"
   },
   "codesPage": {
-    "metaTitle": "Serbian payment codes (šifra plaćanja): full list with meanings",
-    "metaDescription": "All payment codes for Serbian payment slips: what 189, 289, 253, 254, 221 and others mean, and when to use 1 or 2 as the first digit. Search by number or description.",
+    "metaTitle": "Serbian payment codes (šifra plaćanja): full list",
+    "metaDescription": "All payment codes for Serbian payment slips: what 189, 289, 253, 254, 221 mean and when to use 1 or 2 as the first digit. Search by number or text.",
     "title": "Payment codes (šifre plaćanja)",
     "lead": "A payment code has three digits. The first is the payment form, the other two are the basis of payment. Find the right code by number or description.",
     "cash": "cash payment (at the counter)",
@@ -290,7 +290,7 @@
     "source": "Source: NBS decision on payment order forms, Annex 3"
   },
   "accountPage": {
-    "metaTitle": "Serbian bank account checker: check digits and bank by account number",
+    "metaTitle": "Serbian bank account checker: check digits and bank",
     "metaDescription": "Check whether a Serbian bank account number is valid (mod 97 check digits) and which bank it belongs to. Free, nothing is sent anywhere.",
     "title": "Serbian account number checker",
     "lead": "Enter an account number and we will check its control digits and bank, so you catch a typo before paying.",

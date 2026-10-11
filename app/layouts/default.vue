@@ -56,6 +56,9 @@ const donate = ref<{ open: () => void }>()
     </footer>
 
     <DonateDialog ref="donate" />
+    <ClientOnly>
+      <LangSuggest />
+    </ClientOnly>
   </div>
 </template>
 

@@ -118,7 +118,7 @@ function onDecoded(payload: string) {
       v-if="showImport"
       class="card import no-print"
     >
-      <QrImport @decoded="onDecoded" />
+      <LazyQrImport @decoded="onDecoded" />
       <p
         v-if="importError"
         class="verdict bad"

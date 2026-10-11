@@ -189,7 +189,7 @@ export const TEMPLATES: PaymentTemplate[] = [
     name: { sr: 'Paušalni porez i doprinosi', en: 'Flat-rate tax and contributions', ru: 'Паушальный налог и взносы' },
     title: { sr: 'Uplatnice za paušalni porez i doprinose preduzetnika', en: 'Payment slips for flat-rate tax and contributions (paušalci)', ru: 'Квитанции на паушальный налог и взносы ИП' },
     metaDescription: {
-      sr: 'Četiri popunjena naloga za paušalce: porez 840-711122843-32, PIO 840-721313843-74, zdravstvo 840-721325843-61, nezaposlenost 840-721331843-06. Šifra 253, model 97.',
+      sr: 'Četiri popunjena naloga za paušalce: porez 840-711122843-32, PIO 840-721313843-74, zdravstvo 840-721325843-61, nezaposlenost 840-721331843-06. Šifra 253.',
       en: 'Four filled slips for flat-rate sole traders in Serbia: tax, pension, health and unemployment contributions. Code 253, model 97.',
       ru: 'Четыре готовые квитанции для паушальных ИП в Сербии: налог, пенсионный, медицинский взнос и взнос по безработице. Код 253, модель 97.',
     },
@@ -282,7 +282,7 @@ export const TEMPLATES: PaymentTemplate[] = [
     title: { sr: 'Uplatnica za pasoš: kako i gde se plaća', en: 'How to pay for a Serbian passport', ru: 'Как оплатить сербский паспорт' },
     metaDescription: {
       sr: 'Kako se plaća pasoš: samo uplatnicom sa portala eUprava (ePlati). Zahtev za pasoš je oslobođen republičke takse.',
-      en: 'How to pay for a Serbian passport: only with a slip from the eUprava portal (ePlati). The passport application itself is exempt from the administrative fee.',
+      en: 'How to pay for a Serbian passport: only with a slip from the eUprava portal (ePlati). The application itself is exempt from the administrative fee.',
       ru: 'Как оплатить сербский паспорт: только квитанцией с портала eUprava (ePlati). Само заявление на паспорт освобождено от пошлины.',
     },
     intro: EPLATI_NOTE,

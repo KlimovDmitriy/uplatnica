@@ -4,6 +4,7 @@ import { TOOLS } from '~/data/tools'
 
 defineEmits<{ donate: [] }>()
 const { t } = useI18n()
+const { enabled: donateEnabled } = useDonate()
 </script>
 
 <template>
@@ -24,6 +25,7 @@ const { t } = useI18n()
       {{ t('footer.disclaimer') }}
     </p>
     <button
+      v-if="donateEnabled"
       type="button"
       class="btn small donate"
       @click="$emit('donate')"

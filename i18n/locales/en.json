@@ -138,14 +138,22 @@
     "button": "Thank the author",
     "title": "Thank the author",
     "lead": "This site is free and ad-free. If it helped you, you can support further development.",
-    "empty": "Support options are not configured yet.",
     "tabs": {
       "ips": "Prenesi / IPS",
-      "crypto": "Crypto",
-      "links": "Services"
+      "sepa": "SEPA (EUR)",
+      "card": "Card",
+      "crypto": "Crypto"
     },
     "ipsHint": "Pick an amount and scan the code in Serbian mobile banking (Prenesi / IPS).",
-    "cryptoWarn": "Send only the listed token on the listed network, otherwise funds may be lost."
+    "sepaHint": "SEPA transfer in euros from a bank in Montenegro or the EU. Scan the EPC QR code with a banking app that supports it, or copy the details.",
+    "name": "Payee",
+    "bank": "Bank",
+    "network": "Network",
+    "accepted": "Accepted: {coins} on {network}.",
+    "address": "address",
+    "addressQr": "Address QR, {network}",
+    "cryptoWarn": "Send only the listed token on the listed network, otherwise funds may be lost.",
+    "cryptoEvm": "One address works for all EVM networks: select exactly this network in your wallet when sending."
   },
   "footer": {
     "disclaimer": "Uplatnica is not affiliated with the National Bank of Serbia or any bank. Check the recipient details before paying."

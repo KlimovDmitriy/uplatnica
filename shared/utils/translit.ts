@@ -18,8 +18,8 @@ const LETTERS: Record<string, string> = {
 
 /** Words kept in Latin script: brands and technical acronyms that Cyrillic texts also write in Latin. */
 const KEEP = new Set([
-  'Buy', 'Me', 'Coffee', 'DonatePay', 'DonationAlerts', 'Viber', 'WhatsApp', 'Telegram', 'Google', 'Android', 'iPhone',
-  'IPS', 'QR', 'RSD', 'EUR', 'PDF', 'PNG', 'PWA', 'USDT', 'USDC', 'TON', 'BTC', 'ETH', 'ERC', 'TRC',
+  'Buy', 'Me', 'Coffee', 'Viber', 'WhatsApp', 'Telegram', 'Google', 'Android', 'iPhone',
+  'IPS', 'QR', 'RSD', 'EUR', 'PDF', 'PNG', 'PWA', 'SEPA', 'EPC', 'IBAN', 'BIC', 'EVM', 'USDT', 'USDC',
 ])
 
 /** Bare domains: at least one label before a known TLD ("kjs.trezor.gov.rs", "apr.gov.rs"). */

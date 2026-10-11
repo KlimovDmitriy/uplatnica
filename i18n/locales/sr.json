@@ -138,14 +138,22 @@
     "button": "Zahvali autoru",
     "title": "Zahvali autoru",
     "lead": "Sajt je besplatan i bez reklama. Ako vam je koristio, možete podržati dalji razvoj.",
-    "empty": "Načini podrške još nisu podešeni.",
     "tabs": {
       "ips": "Prenesi / IPS",
-      "crypto": "Kripto",
-      "links": "Servisi"
+      "sepa": "SEPA (EUR)",
+      "card": "Kartica",
+      "crypto": "Kripto"
     },
     "ipsHint": "Izaberite iznos i skenirajte kod u mobilnom bankarstvu (Prenesi / IPS).",
-    "cryptoWarn": "Šaljite samo navedeni token na navedenoj mreži, inače se sredstva mogu izgubiti."
+    "sepaHint": "SEPA prenos u evrima iz banke u Crnoj Gori ili EU. Skenirajte EPC QR kod u bankarskoj aplikaciji koja ga podržava ili kopirajte podatke.",
+    "name": "Primalac",
+    "bank": "Banka",
+    "network": "Mreža",
+    "accepted": "Prihvata se: {coins} na mreži {network}.",
+    "address": "adresa",
+    "addressQr": "QR adrese, {network}",
+    "cryptoWarn": "Šaljite samo navedeni token na navedenoj mreži, inače se sredstva mogu izgubiti.",
+    "cryptoEvm": "Jedna adresa važi za sve EVM mreže: u novčaniku izaberite tačno ovu mrežu pri slanju."
   },
   "footer": {
     "disclaimer": "Uplatnica nije povezana sa NBS ni sa bankama. Pre plaćanja proverite podatke primaoca."

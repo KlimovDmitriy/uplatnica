@@ -10,7 +10,8 @@ export default defineNuxtPlugin({
   dependsOn: ['nuxt-schema-org:init', 'nuxt-schema-org:meta'],
   setup(nuxtApp) {
     const siteConfig = useSiteConfig()
-    const origin = () => toValue(siteConfig.url).replace(/\/$/, '')
+    const siteUrl = useSiteUrl()
+    const origin = () => siteUrl
     const websiteId = () => `${origin()}/#website`
 
     useSchemaOrg([

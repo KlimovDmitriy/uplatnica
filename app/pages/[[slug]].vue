@@ -3,7 +3,7 @@
  * The only page. "/" is the blank generator; "/<template>" is the same page with a ready-made
  * slip, "/<tool>" opens that tool first. Each variant has its own title and description.
  */
-import { findTemplate } from '~/data/templates'
+import { findTemplate, referenceRule } from '~/data/templates'
 import { findInfoPage } from '~/data/pages'
 import { FAQ, TOOLS, findTool } from '~/data/tools'
 import PrivacyPolicy from '~/components/PrivacyPolicy.vue'
@@ -128,6 +128,7 @@ useSchemaOrg([
         v-if="!template || payment"
         id="generator"
         :preset="payment?.preset"
+        :reference-rule="referenceRule(payment)"
         :persist="!template"
         :ads="!tool"
       />

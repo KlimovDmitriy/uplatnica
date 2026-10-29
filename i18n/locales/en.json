@@ -75,6 +75,10 @@
       "invalid": "Model has 2 digits"
     },
     "reference": {
+      "required": {
+        "tax": "Enter the reference number from the Tax Administration decision. Without it the tax authority cannot link the payment to you.",
+        "institution": "Enter the reference number from the decision or the institution's instructions. Without it the recipient cannot link the payment to you."
+      },
       "tooLong": "Up to {max} characters",
       "invalid": "Only digits, letters and dashes",
       "checksum": "Model 97 check digits are wrong"
@@ -328,6 +332,8 @@
     }
   },
   "batch": {
+    "missingReference": "Reference number missing",
+    "fixFirst": "Fill in the marked slips to download the PDF.",
     "add": "Add to batch",
     "save": "Save changes",
     "title": "Print batch",

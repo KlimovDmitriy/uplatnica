@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { SlipForm, SlipKind } from '~/composables/useSlip'
+import type { ReferenceRule } from '~/data/templates'
 
 const props = defineProps<{
   /** Prefills the slip (template pages). Applied on the server too, so the prerendered HTML shows it. */
   preset?: Partial<SlipForm>
+  /** The preset's reference may not stay empty (see referenceRule in data/templates.ts). */
+  referenceRule?: ReferenceRule | null
   /** Restore/save the local draft (main and tool pages). Shared links are read on every page. */
   persist?: boolean
   /** Show the after-slip ad slot below the actions. */
@@ -13,11 +16,11 @@ const props = defineProps<{
 const { t, locale } = useI18n()
 const { form, setForm, patch, script, fromLink, restore } = useSlip()
 
-if (props.preset) setForm(props.preset)
+if (props.preset) setForm(props.preset, props.referenceRule)
 // Another payment tab of the template: its preset replaces the slip, but what the user typed into
 // fields the new preset does not set (payer, amount, reference…) carries over.
 watch(() => props.preset, (preset, old) => {
-  if (preset) setForm({ ...changedFields(form.value, old), ...preset })
+  if (preset) setForm({ ...changedFields(form.value, old), ...preset }, props.referenceRule)
 })
 restore(!!props.persist)
 

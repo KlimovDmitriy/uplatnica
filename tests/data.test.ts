@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { TEMPLATES } from '../app/data/templates'
+import { TEMPLATES, referenceRule } from '../app/data/templates'
 import { MUNICIPALITIES } from '../app/data/municipalities'
 import { PAYMENT_CODES } from '../app/data/paymentCodes'
 import { LIMITS, buildIpsString, isAccountChecksumValid, normalizeAccount, parseIpsString } from '../shared/utils/ips'
@@ -66,5 +66,34 @@ describe('municipality names and codes', () => {
     const byName = Object.fromEntries(MUNICIPALITIES)
     expect(byName['Palilula (Beograd)']).toBe('015')
     expect(byName['Palilula (Niš)']).toBe('127')
+  })
+})
+
+describe('referenceRule', () => {
+  const preset = (account: string, model: string) => ({ preset: { account, model } })
+
+  it('requires a reference for a public-revenue account with model 97', () => {
+    expect(referenceRule(preset('840-711122843-32', '97'))).toBe('institution')
+    expect(referenceRule({ ...preset('840-711122843-32', '97'), referenceSource: 'tax' })).toBe('tax')
+  })
+
+  it('does not require one for other accounts or models, or without a payment', () => {
+    expect(referenceRule(preset('160-5100000000-02', '97'))).toBeNull()
+    expect(referenceRule(preset('840-711122843-32', '11'))).toBeNull()
+    expect(referenceRule(preset('840-711122843-32', ''))).toBeNull()
+    expect(referenceRule(undefined)).toBeNull()
+  })
+
+  it('lets the data override the derivation both ways', () => {
+    expect(referenceRule({ ...preset('840-711122843-32', '97'), referenceRequired: false })).toBeNull()
+    expect(referenceRule({ ...preset('160-5100000000-02', '11'), referenceRequired: true })).toBe('institution')
+  })
+
+  it('applies to every 840- model 97 payment of the templates', () => {
+    const rules = TEMPLATES.flatMap(t => t.payments.map(p => [`${t.slug}/${p.id}`, referenceRule(p)] as const))
+    expect(rules.length).toBe(8)
+    for (const [id, rule] of rules) expect(rule, id).not.toBeNull()
+    expect(rules.filter(([, r]) => r === 'tax').map(([id]) => id)).toEqual(
+      ['pausalni-porez-i-doprinosi/porez', 'pausalni-porez-i-doprinosi/pio', 'pausalni-porez-i-doprinosi/zdravstvo', 'pausalni-porez-i-doprinosi/nezaposlenost'])
   })
 })

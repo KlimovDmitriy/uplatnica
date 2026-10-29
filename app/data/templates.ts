@@ -14,6 +14,27 @@ export interface TemplatePayment {
   amountNote?: Localized
   /** Show the RAT poziv na broj builder (municipality + JBKJS). */
   referenceTool?: 'rat'
+  /**
+   * Overrides whether an empty reference blocks the slip. Left out, it follows referenceRule():
+   * a public-revenue account (840-) with model 97 needs one. Set false where the payee accepts none.
+   */
+  referenceRequired?: boolean
+  /** Who issues the reference; picks the wording of the "reference required" error. Default: the institution. */
+  referenceSource?: 'tax'
+}
+
+/** Why the reference is mandatory: 'tax' = the Tax Administration decision, 'institution' = any other payee. */
+export type ReferenceRule = 'tax' | 'institution'
+
+/** Reference models of public-revenue payments that the treasury matches to the payer. */
+const REQUIRED_MODELS = ['97']
+
+/** The payer is identified only by the model and the reference, so an empty one cannot be matched. */
+export function referenceRule(payment?: Pick<TemplatePayment, 'preset' | 'referenceRequired' | 'referenceSource'>): ReferenceRule | null {
+  if (!payment) return null
+  const { account = '', model = '' } = payment.preset
+  const required = payment.referenceRequired ?? (account.startsWith('840-') && REQUIRED_MODELS.includes(model))
+  return required ? (payment.referenceSource ?? 'institution') : null
 }
 
 export interface TemplateFee {
@@ -205,6 +226,7 @@ export const TEMPLATES: PaymentTemplate[] = [
       { id: 'nezaposlenost', label: { sr: 'Nezaposlenost', en: 'Unemployment', ru: 'Безработица' }, preset: { kind: 'uplata', payee: BUDGET, account: '840-721331843-06', paymentCode: '253', model: '97', purpose: 'Doprinos nezaposlenost za ' } },
     ].map((p): TemplatePayment => ({
       ...p,
+      referenceSource: 'tax',
       preset: { ...p.preset, kind: 'uplata' },
       referenceHint: {
         sr: 'Iz rešenja Poreske uprave ili primera uplatnice sa QR kodom (od 2026. poziv na broj sadrži BOP za 2026).',

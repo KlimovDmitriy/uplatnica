@@ -1,3 +1,4 @@
+import type { ReferenceRule } from '~/data/templates'
 import type { SlipForm, SlipKind } from './useSlip'
 
 /** i18n key of a slip field's label; the wording follows the slip kind (payer or debtor, …). */
@@ -25,13 +26,18 @@ const FIELDS: (keyof SlipForm)[] = ['payer', 'payee', 'purpose', 'paymentCode', 
 
 export interface SlipProblem { field: keyof SlipForm, label: string, text: string, code: string }
 
+/** Empty reference on a template payment that needs one: the treasury could not match the payment to the payer. */
+export function referenceMissing(reference: string, rule: ReferenceRule | null): ReferenceRule | null {
+  return rule && !reference.trim() ? rule : null
+}
+
 /**
  * What the error summary lists: IPS validation errors plus text the drawing would clip (lines beyond
  * the third, lines wider than the box). The fields use it for aria-invalid / aria-describedby.
  */
 export function useSlipProblems() {
   const { t } = useI18n()
-  const { form, fieldError } = useSlip()
+  const { form, fieldError, referenceRule } = useSlip()
 
   function layoutError(field: keyof SlipForm): string | undefined {
     const box = slipBoxes(form.value.kind).find(b => b.key === field && b.multiline)
@@ -39,9 +45,13 @@ export function useSlipProblems() {
     return problem ? `layout.${problem}` : undefined
   }
 
+  /** Why the reference may not stay empty, if it is empty and the slip needs one. */
+  const missingReference = computed(() => referenceMissing(form.value.reference, referenceRule.value))
+
   const problems = computed(() => FIELDS
     .map((field) => {
       const e = fieldError(field) ?? layoutError(field)
+        ?? (field === 'reference' && missingReference.value ? `reference.required.${missingReference.value}` : undefined)
       return e && {
         field,
         label: t(slipFieldLabel(field, form.value.kind)),
@@ -53,7 +63,10 @@ export function useSlipProblems() {
 
   const problemFor = (field: keyof SlipForm) => problems.value.find(p => p.field === field)
 
-  return { problems, problemFor }
+  /** Blocks PDF, print, share and the batch: the slip is useless to the payer as it is. */
+  const blocked = computed(() => !!missingReference.value)
+
+  return { problems, problemFor, blocked }
 }
 
 /** id of a field's entry in the error summary (aria-describedby target). */

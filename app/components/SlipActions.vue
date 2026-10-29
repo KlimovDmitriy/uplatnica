@@ -4,7 +4,10 @@ import QRCode from 'qrcode'
 defineProps<{ importOpen?: boolean }>()
 const emit = defineEmits<{ import: [] }>()
 const { t } = useI18n()
-const { form, script, ipsString, shareUrl, reset } = useSlip()
+const { form, script, ipsString, shareUrl, reset, referenceRule } = useSlip()
+const { blocked } = useSlipProblems()
+/** The reason a blocked button is disabled: the error in the summary right above. */
+const why = computed(() => (blocked.value ? slipErrorId('reference') : undefined))
 const { put, editing, full, items } = useBatch()
 
 const flash = ref('')
@@ -25,7 +28,7 @@ async function pdf() {
 }
 
 function addToBatch() {
-  put(form.value)
+  put(form.value, referenceRule.value)
   note('added')
 }
 
@@ -59,7 +62,8 @@ async function share() {
       <button
         type="button"
         class="btn primary pdf"
-        :disabled="busy"
+        :disabled="busy || blocked"
+        :aria-describedby="why"
         @click="pdf"
       >
         {{ t('actions.pdf') }}
@@ -67,6 +71,8 @@ async function share() {
       <button
         type="button"
         class="btn"
+        :disabled="blocked"
+        :aria-describedby="why"
         @click="print"
       >
         {{ t('actions.print') }}
@@ -74,6 +80,8 @@ async function share() {
       <button
         type="button"
         class="btn"
+        :disabled="blocked"
+        :aria-describedby="why"
         @click="share"
       >
         {{ t('share.copyLink') }}
@@ -81,7 +89,8 @@ async function share() {
       <button
         type="button"
         class="btn add"
-        :disabled="full && !editing"
+        :disabled="(full && !editing) || blocked"
+        :aria-describedby="why"
         @click="addToBatch"
       >
         {{ editing ? t('batch.save') : t('batch.add') }}<template v-if="items.length && !editing">

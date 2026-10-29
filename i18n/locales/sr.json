@@ -75,6 +75,10 @@
       "invalid": "Model ima 2 cifre"
     },
     "reference": {
+      "required": {
+        "tax": "Upišite poziv na broj iz rešenja Poreske uprave. Bez njega poreska uprava ne može da poveže uplatu sa vama.",
+        "institution": "Upišite poziv na broj iz rešenja ili uputstva institucije. Bez njega primalac ne može da poveže uplatu sa vama."
+      },
       "tooLong": "Najviše {max} znakova",
       "invalid": "Dozvoljene su cifre, slova i crtica",
       "checksum": "Kontrolni broj po modelu 97 nije ispravan"
@@ -328,6 +332,8 @@
     }
   },
   "batch": {
+    "missingReference": "Nedostaje poziv na broj",
+    "fixFirst": "Dopunite označene naloge da biste preuzeli PDF.",
     "add": "Dodaj u paket",
     "save": "Sačuvaj izmene",
     "title": "Paket za štampu",

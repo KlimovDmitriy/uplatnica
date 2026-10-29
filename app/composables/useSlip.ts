@@ -1,4 +1,5 @@
 import type { IpsError, IpsInput } from '#shared/utils/ips'
+import type { ReferenceRule } from '~/data/templates'
 
 export type SlipKind = 'uplata' | 'prenos'
 export type SlipScript = 'latn' | 'cyrl'
@@ -110,6 +111,8 @@ export function useSlip() {
   const script = useState<SlipScript>('slip-script', () => 'latn')
   /** Set when the form was filled from a shared link, so the UI can say so. */
   const fromLink = useState<boolean>('slip-from-link', () => false)
+  /** Set while the slip is a template payment whose reference may not stay empty; any other slip clears it. */
+  const referenceRule = useState<ReferenceRule | null>('slip-reference-rule', () => null)
   const shared = useSharedSlip()
   const { editing } = useBatch()
   const router = useRouter()
@@ -129,8 +132,9 @@ export function useSlip() {
    * Replaces the whole slip. This also ends editing a batch item (BatchPanel sets `editing` again
    * right after) and hides the "loaded from a link" note, so neither outlives the slip it was about.
    */
-  function setForm(values: Partial<SlipForm> = {}) {
+  function setForm(values: Partial<SlipForm> = {}, rule: ReferenceRule | null = null) {
     form.value = { ...emptyForm(), ...values }
+    referenceRule.value = rule
     editing.value = null
     fromLink.value = false
   }
@@ -188,7 +192,7 @@ export function useSlip() {
     })
   }
 
-  return { form, script, fromLink, errors, ipsString, fieldError, setForm, patch, reset, shareUrl, restore }
+  return { form, script, fromLink, referenceRule, errors, ipsString, fieldError, setForm, patch, reset, shareUrl, restore }
 }
 
 /**

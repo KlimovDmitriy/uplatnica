@@ -21,6 +21,13 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  // Internal links point at the slashed URL too, so neither crawlers nor visitors hit the redirect.
+  experimental: {
+    defaults: {
+      nuxtLink: { trailingSlash: 'append' },
+    },
+  },
+
   hooks: {
     // "/ru/x", "/en/x", "/sr-cyrl/x": the same pages rendered in another language, so search
     // engines index every language. plugins/locale-route.ts sets the language from the prefix.
@@ -59,6 +66,9 @@ export default defineNuxtConfig({
   // i18n integration would only emit the en/ru ones: it doesn't know our prefix routing).
   sitemap: {
     autoI18n: false,
+    // The pages source holds only the dynamic [[slug]] route, so the module falls back to the bare base path,
+    // which comes out as ".../base/base/". Every real URL comes from the prerendered pages.
+    excludeAppSources: ['nuxt:pages'],
   },
 
   // Baked in at `nuxt generate` from NUXT_PUBLIC_* env vars (see .env.example).
@@ -100,6 +110,9 @@ export default defineNuxtConfig({
 
   site: {
     url: siteUrl,
+    // Pages are prerendered as folders (x/index.html), which static hosts serve at "/x/" and redirect
+    // "/x" to: the sitemap, canonical and hreflang (usePageUrl) all use the final, slashed URL.
+    trailingSlash: true,
     name: 'Uplatnica',
     indexable: !noindex,
   },
@@ -147,6 +160,9 @@ export default defineNuxtConfig({
       crawlLinks: true,
       // ads.txt exists only when AdSense is on (server/routes/ads.txt.ts answers 404 otherwise).
       routes: ['/', ...PREFIXED_LOCALES.map(code => `/${code}`), ...(adsenseOn ? ['/ads.txt'] : [])],
+      // Crawled links carry the base path, so the home link is the bare base: the same page as the initial "/"
+      // route. The sitemap module turns that route into ".../base/base/", so it is not rendered twice.
+      ignore: baseURL === '/' ? [] : [(route: string) => route === baseURL],
     },
   },
 })

@@ -13,7 +13,8 @@ import PrivacyPolicy from '~/components/PrivacyPolicy.vue'
 definePageMeta({ key: route => splitLangPrefix(route.path).path })
 
 const route = useRoute()
-const { t, locale } = useI18n()
+const { t, localeProperties } = useI18n()
+const pageUrl = usePageUrl()
 const l = useLocalized()
 
 const slug = String(route.params.slug ?? '')
@@ -38,7 +39,7 @@ usePageSeo({
     return template.payments.length && full.length <= 60 ? full : plain
   },
   description: () => (template ? l(template.metaDescription) : tool ? t(`${tool.prefix}.metaDescription`) : info ? t(`${info.prefix}.metaDescription`) : t('meta.description')),
-  breadcrumb: slug ? [{ name: title }] : undefined,
+  breadcrumb: slug ? title : undefined,
 })
 
 const faq = tool
@@ -51,10 +52,14 @@ useSchemaOrg([
     ? []
     : [defineSoftwareApp({
         name: () => t('meta.appName'),
+        description: () => t('meta.description'),
+        url: () => pageUrl(splitLangPrefix(route.path).code, '/'),
         applicationCategory: 'FinanceApplication',
         operatingSystem: 'Web',
-        inLanguage: () => locale.value,
+        inLanguage: () => localeProperties.value.language,
+        isAccessibleForFree: true,
         offers: { price: 0, priceCurrency: 'RSD' },
+        author: { '@id': `${useSiteUrl()}/#author` },
       })]),
   ...faq.map(f => defineQuestion({ name: () => t(f.q), acceptedAnswer: () => t(f.a) })),
 ])
@@ -127,6 +132,12 @@ useSchemaOrg([
         :ads="!tool"
       />
 
+      <SlipHowTo
+        v-if="template"
+        class="no-print"
+        :template="template"
+      />
+
       <TemplateSources
         v-if="template"
         class="no-print"
@@ -152,6 +163,11 @@ useSchemaOrg([
           :tool="other"
         />
       </div>
+
+      <SlipHowTo
+        v-if="!slug"
+        class="no-print"
+      />
 
       <FaqSection
         v-if="!slug"

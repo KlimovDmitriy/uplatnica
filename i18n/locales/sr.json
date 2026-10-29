@@ -256,7 +256,7 @@
   },
   "templatesPage": {
     "popular": "Gotove uplatnice",
-    "metaTitle": "{title} | IPS QR",
+    "metaTitle": "{title} {'|'} IPS QR",
     "notes": "Važno",
     "sources": "Izvori",
     "checked": "Podaci provereni {date}. Iznosi taksi se menjaju, pa pre plaćanja proverite iznos na sajtu institucije.",
@@ -354,7 +354,7 @@
   },
   "privacy": {
     "title": "Politika privatnosti",
-    "metaTitle": "Politika privatnosti | Uplatnica",
+    "metaTitle": "Politika privatnosti {'|'} Uplatnica",
     "metaDescription": "Kako Uplatnica postupa sa podacima: nacrt uplatnice ostaje u vašem pregledaču i ništa se ne šalje na server.",
     "dataTitle": "Podaci koje unosite",
     "data": "Podaci sa uplatnice (primalac, račun, iznos, poziv na broj) ostaju u vašem pregledaču. Nacrt, spisak uplatnica za štampu i izabrani jezik čuvaju se samo u localStorage na vašem uređaju. Sajt ih ne šalje na server, nema naloga ni baze podataka. Brisanjem podataka sajta u pregledaču brišu se i oni.",
@@ -367,5 +367,38 @@
     "donate": "Donacije idu direktno navedenim platnim uslugama i banci. Sajt ih ne obrađuje i ne čuva podatke o uplatiocima.",
     "contactTitle": "Kontakt",
     "contact": "Pitanja o podacima:"
+  },
+  "howTo": {
+    "title": "Kako popuniti uplatnicu",
+    "templateTitle": "Kako popuniti ovaj nalog",
+    "kind": "Obrazac",
+    "steps": {
+      "payer": {
+        "title": "Uplatilac i svrha uplate",
+        "text": "Upišite ime, prezime i adresu onoga ko plaća, najviše tri reda, i kratko za šta je uplata. U IPS QR kod staje do 70 znakova za uplatioca i 35 za svrhu."
+      },
+      "payee": {
+        "title": "Primalac",
+        "text": "Naziv i sedište primaoca, onako kako piše na računu, rešenju ili sajtu institucije."
+      },
+      "code": {
+        "title": "Šifra plaćanja",
+        "text": "Tri cifre: prva je oblik plaćanja (1 gotovinski, 2 bezgotovinski), druge dve osnov, na primer 53 za poreze i takse. Ceo spisak je u alatu „Šifre plaćanja”."
+      },
+      "amount": {
+        "title": "Valuta i iznos",
+        "text": "Valuta je RSD. Iznos se piše sa decimalnim zarezom, na primer 2.500,00."
+      },
+      "account": {
+        "title": "Račun primaoca",
+        "text": "18 cifara: tri cifre banke, trinaest cifara računa i dve kontrolne. Može se pisati bez vodećih nula u sredini, na primer 840-742221843-57. Generator proverava kontrolni broj po modulu 97."
+      },
+      "reference": {
+        "title": "Model i poziv na broj",
+        "text": "Poziv na broj je broj po kome primalac prepoznaje uplatu. Model 97 znači da prve dve cifre poziva na broj čine kontrolni broj. Za poreze i takse oba podatka preuzmite iz rešenja ili sa sajta institucije; ako ih primalac nije dao, polja ostaju prazna."
+      }
+    },
+    "ipsTitle": "IPS QR kod na uplatnici",
+    "ipsText": "IPS QR je standard Narodne banke Srbije za instant plaćanja. Kod sadrži račun i naziv primaoca, iznos u dinarima, šifru plaćanja, svrhu i poziv na broj, a pravi se po preporukama NBS za generatore. U mobilnom bankarstvu skenirate kod, proverite podatke i potvrdite plaćanje; banka može da dozvoli izmenu nekih podataka, na primer iznosa."
   }
 }

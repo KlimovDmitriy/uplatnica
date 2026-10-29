@@ -256,7 +256,7 @@
   },
   "templatesPage": {
     "popular": "Ready-made slips",
-    "metaTitle": "{title} | IPS QR",
+    "metaTitle": "{title} {'|'} IPS QR",
     "notes": "Important",
     "sources": "Sources",
     "checked": "Data checked in {date}. Fees change, so check the amount on the institution website before paying.",
@@ -354,7 +354,7 @@
   },
   "privacy": {
     "title": "Privacy policy",
-    "metaTitle": "Privacy policy | Uplatnica",
+    "metaTitle": "Privacy policy {'|'} Uplatnica",
     "metaDescription": "How Uplatnica handles data: the slip draft stays in your browser and nothing is sent to a server.",
     "dataTitle": "What you enter",
     "data": "The slip details (payee, account, amount, reference) stay in your browser. The draft, the print batch and the chosen language are kept only in localStorage on your device. The site sends none of it to a server and has no accounts or database. Clearing the site data in your browser deletes it.",
@@ -367,5 +367,38 @@
     "donate": "Donations go directly to the listed payment providers and bank. The site does not process them and keeps no data about donors.",
     "contactTitle": "Contact",
     "contact": "Questions about data:"
+  },
+  "howTo": {
+    "title": "How to fill in a Serbian payment slip",
+    "templateTitle": "How to fill in this slip",
+    "kind": "Form",
+    "steps": {
+      "payer": {
+        "title": "Payer and purpose",
+        "text": "Write the name and address of whoever pays, up to three lines, and briefly what the payment is for. The IPS QR code holds up to 70 characters for the payer and 35 for the purpose."
+      },
+      "payee": {
+        "title": "Recipient",
+        "text": "Name and seat of the recipient, as written on the invoice, decision or the institution's website."
+      },
+      "code": {
+        "title": "Payment code",
+        "text": "Three digits: the first is the form of payment (1 cash, 2 non-cash), the other two the basis, e.g. 53 for taxes and fees. The full list is in the “Payment codes” tool."
+      },
+      "amount": {
+        "title": "Currency and amount",
+        "text": "The currency is RSD. The amount is written with a decimal comma, e.g. 2.500,00."
+      },
+      "account": {
+        "title": "Recipient account",
+        "text": "18 digits: three for the bank, thirteen for the account and two check digits. It may be written without leading zeros in the middle, e.g. 840-742221843-57. The generator verifies the check digits with mod 97."
+      },
+      "reference": {
+        "title": "Model and reference number",
+        "text": "The reference number (poziv na broj) is how the recipient matches the payment. Model 97 means the first two digits of the reference are check digits. For taxes and fees take both from the decision or the institution's website; if the recipient gave none, leave the fields empty."
+      }
+    },
+    "ipsTitle": "The IPS QR code on the slip",
+    "ipsText": "IPS QR is the National Bank of Serbia standard for instant payments. The code holds the recipient's account and name, the amount in dinars, the payment code, purpose and reference, and is built to the NBS recommendations for generators. In your mobile banking app you scan the code, check the details and confirm; the bank may let you change some of them, such as the amount."
   }
 }

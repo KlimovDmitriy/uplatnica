@@ -18,7 +18,7 @@ const LETTERS: Record<string, string> = {
 
 /** Words kept in Latin script: brands and technical acronyms that Cyrillic texts also write in Latin. */
 const KEEP = new Set([
-  'Buy', 'Me', 'Coffee', 'Viber', 'WhatsApp', 'Telegram', 'Google', 'Android', 'iPhone',
+  'Buy', 'Me', 'Coffee', 'Viber', 'WhatsApp', 'Telegram', 'Google', 'AdSense', 'Plausible', 'localStorage', 'Android', 'iPhone',
   'IPS', 'QR', 'RSD', 'EUR', 'PDF', 'PNG', 'PWA', 'SEPA', 'EPC', 'IBAN', 'BIC', 'EVM', 'USDT', 'USDC',
 ])
 

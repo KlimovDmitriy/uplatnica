@@ -137,7 +137,7 @@
   "donate": {
     "button": "Thank the author",
     "title": "Thank the author",
-    "lead": "This site is free and ad-free. If it helped you, you can support further development.",
+    "lead": "This site is free. If it helped you, you can support further development.",
     "tabs": {
       "ips": "Prenesi / IPS",
       "sepa": "SEPA (EUR)",
@@ -166,7 +166,9 @@
     "checkAccount": "Check account",
     "info": "Info and support",
     "skip": "Skip to content",
-    "languages": "Language"
+    "languages": "Language",
+    "infoPlain": "Info",
+    "privacy": "Privacy"
   },
   "share": {
     "title": "Payment slip",
@@ -346,5 +348,24 @@
     "municipality": "Municipality or city",
     "municipalityPlaceholder": "Start typing: Zemun, Novi Sad…",
     "jbkjsHint": "5-digit authority code, at kjs.trezor.gov.rs"
+  },
+  "ads": {
+    "label": "Ad"
+  },
+  "privacy": {
+    "title": "Privacy policy",
+    "metaTitle": "Privacy policy | Uplatnica",
+    "metaDescription": "How Uplatnica handles data: the slip draft stays in your browser and nothing is sent to a server.",
+    "dataTitle": "What you enter",
+    "data": "The slip details (payee, account, amount, reference) stay in your browser. The draft, the print batch and the chosen language are kept only in localStorage on your device. The site sends none of it to a server and has no accounts or database. Clearing the site data in your browser deletes it.",
+    "analyticsTitle": "Visit statistics",
+    "analytics": "Visits are counted with Plausible: no cookies, no personal data and no tracking across sites.",
+    "adsTitle": "Ads",
+    "ads": "The site shows ads through Google AdSense. Google and its partners may use cookies and similar technologies to show and measure ads. You manage consent through Google's consent message.",
+    "adsLink": "How Google uses data from partner sites",
+    "donateTitle": "Donations",
+    "donate": "Donations go directly to the listed payment providers and bank. The site does not process them and keeps no data about donors.",
+    "contactTitle": "Contact",
+    "contact": "Questions about data:"
   }
 }

@@ -4,7 +4,9 @@
  * slip, "/<tool>" opens that tool first. Each variant has its own title and description.
  */
 import { findTemplate } from '~/data/templates'
+import { findInfoPage } from '~/data/pages'
 import { FAQ, TOOLS, findTool } from '~/data/tools'
+import PrivacyPolicy from '~/components/PrivacyPolicy.vue'
 
 // A fresh page per URL, so everything below is set up once for its slug. The language prefix is not
 // part of the key: switching language keeps the page, and with it the slip being edited.
@@ -17,29 +19,31 @@ const l = useLocalized()
 const slug = String(route.params.slug ?? '')
 const template = slug ? findTemplate(slug) : undefined
 const tool = slug ? findTool(slug) : undefined
-if (slug && !template && !tool) throw createError({ statusCode: 404, statusMessage: 'Not found', fatal: true })
+const info = slug ? findInfoPage(slug) : undefined
+const INFO_COMPONENTS = { PrivacyPolicy }
+if (slug && !template && !tool && !info) throw createError({ statusCode: 404, statusMessage: 'Not found', fatal: true })
 
 const active = ref(template?.payments[0]?.id ?? '')
 const payment = computed(() => template?.payments.find(p => p.id === active.value))
 
-const title = () => (template ? l(template.title) : tool ? t(`${tool.prefix}.title`) : t('hero.title'))
+const title = () => (template ? l(template.title) : tool ? t(`${tool.prefix}.title`) : info ? t(`${info.prefix}.title`) : t('hero.title'))
 
 usePageSeo({
   // The "| IPS QR" suffix only where there is a slip (portal-only documents keep the plain title)
   // and only while the title stays within ~60 characters, which is what search results show.
   title: () => {
-    if (!template) return tool ? t(`${tool.prefix}.metaTitle`) : t('meta.title')
+    if (!template) return tool ? t(`${tool.prefix}.metaTitle`) : info ? t(`${info.prefix}.metaTitle`) : t('meta.title')
     const plain = l(template.title)
     const full = t('templatesPage.metaTitle', { title: plain })
     return template.payments.length && full.length <= 60 ? full : plain
   },
-  description: () => (template ? l(template.metaDescription) : tool ? t(`${tool.prefix}.metaDescription`) : t('meta.description')),
+  description: () => (template ? l(template.metaDescription) : tool ? t(`${tool.prefix}.metaDescription`) : info ? t(`${info.prefix}.metaDescription`) : t('meta.description')),
   breadcrumb: slug ? [{ name: title }] : undefined,
 })
 
 const faq = tool
   ? tool.faq.map(k => ({ q: `${tool.prefix}.faq.${k}.q`, a: `${tool.prefix}.faq.${k}.a` }))
-  : template ? [] : FAQ.map(k => ({ q: `faq.${k}.q`, a: `faq.${k}.a` }))
+  : template || info ? [] : FAQ.map(k => ({ q: `faq.${k}.q`, a: `faq.${k}.a` }))
 
 useSchemaOrg([
   defineWebPage({ '@type': faq.length ? ['WebPage', 'FAQPage'] : 'WebPage' }),
@@ -74,7 +78,7 @@ useSchemaOrg([
       >
         {{ t(`${tool.prefix}.lead`) }}
       </p>
-      <template v-else-if="!template">
+      <template v-else-if="!template && !info">
         <p class="lead">
           {{ t('hero.lead') }}
         </p>
@@ -84,58 +88,77 @@ useSchemaOrg([
       </template>
     </header>
 
-    <ToolSection
-      v-if="tool"
-      class="no-print"
-      :tool="tool"
-      focus
-    />
-
-    <TemplatePicker
-      v-if="!template"
+    <component
+      :is="INFO_COMPONENTS[info.component]"
+      v-if="info"
       class="no-print"
     />
 
-    <TemplateDetails
-      v-if="template"
-      v-model="active"
-      class="no-print"
-      :template="template"
-    />
-
-    <SlipGenerator
-      v-if="!template || payment"
-      id="generator"
-      :preset="payment?.preset"
-      :persist="!template"
-    />
-
-    <TemplateSources
-      v-if="template"
-      class="no-print"
-      :template="template"
-    />
-
-    <TemplatePicker
-      v-if="template"
-      class="no-print"
-      :current="template.slug"
-      more
-    />
-
-    <div class="tools card no-print">
+    <template v-else>
       <ToolSection
-        v-for="other in TOOLS.filter(x => x !== tool)"
-        :key="other.slug"
-        :tool="other"
+        v-if="tool"
+        class="no-print"
+        :tool="tool"
+        focus
       />
-    </div>
+      <!-- Tool pages: both slots right below the tool's result card. -->
+      <template v-if="tool">
+        <AdSlot name="after-slip" />
+        <AdSlot name="content" />
+      </template>
 
-    <FaqSection
-      v-if="!slug"
-      class="no-print"
-      :keys="FAQ"
-    />
+      <TemplatePicker
+        v-if="!template"
+        class="no-print"
+      />
+
+      <TemplateDetails
+        v-if="template"
+        v-model="active"
+        class="no-print"
+        :template="template"
+      />
+
+      <SlipGenerator
+        v-if="!template || payment"
+        id="generator"
+        :preset="payment?.preset"
+        :persist="!template"
+        :ads="!tool"
+      />
+
+      <TemplateSources
+        v-if="template"
+        class="no-print"
+        :template="template"
+      />
+
+      <AdSlot
+        v-if="!tool"
+        name="content"
+      />
+
+      <TemplatePicker
+        v-if="template"
+        class="no-print"
+        :current="template.slug"
+        more
+      />
+
+      <div class="tools card no-print">
+        <ToolSection
+          v-for="other in TOOLS.filter(x => x !== tool)"
+          :key="other.slug"
+          :tool="other"
+        />
+      </div>
+
+      <FaqSection
+        v-if="!slug"
+        class="no-print"
+        :keys="FAQ"
+      />
+    </template>
   </div>
 </template>
 

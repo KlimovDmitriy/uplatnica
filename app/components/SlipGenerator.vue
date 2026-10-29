@@ -6,6 +6,8 @@ const props = defineProps<{
   preset?: Partial<SlipForm>
   /** Restore/save the local draft (main and tool pages). Shared links are read on every page. */
   persist?: boolean
+  /** Show the after-slip ad slot below the actions. */
+  ads?: boolean
 }>()
 
 const { t, locale } = useI18n()
@@ -112,6 +114,11 @@ function onDecoded(payload: string) {
       class="no-print"
       :import-open="showImport"
       @import="showImport = !showImport"
+    />
+
+    <AdSlot
+      v-if="ads"
+      name="after-slip"
     />
 
     <div

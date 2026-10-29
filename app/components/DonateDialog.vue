@@ -4,32 +4,40 @@ import { donateConfig } from '~/config/donate'
 const { t } = useI18n()
 const dialog = ref<HTMLDialogElement>()
 
-// The layout renders this dialog only when at least one method is configured.
-const { ips, sepa, links, networks } = useDonate()
+// The layout renders this dialog only while at least one method is visible in the current language.
+const d = useDonate()
 
 const ipsAmount = ref(donateConfig.ips.amounts[1] ?? donateConfig.ips.amounts[0] ?? 500)
-const ipsPayload = computed(() => ips ? buildIpsString(ips.input(ipsAmount.value)) : '')
+const ipsPayload = computed(() => d.value.ips ? buildIpsString(d.value.ips.input(ipsAmount.value)) : '')
 type Tab = 'ips' | 'sepa' | 'card' | 'crypto'
-const tabs = ([
-  ips && 'ips',
-  sepa && 'sepa',
-  links.length && 'card',
-  networks.length && 'crypto',
-].filter(Boolean) as Tab[])
-const tab = ref<Tab>(tabs[0] ?? 'sepa')
+const tabs = computed(() => ([
+  d.value.ips && 'ips',
+  d.value.sepa && 'sepa',
+  d.value.links.length && 'card',
+  d.value.networks.length && 'crypto',
+].filter(Boolean) as Tab[]))
+// The language can change the available tabs (ru adds links), so fall back to the first one.
+const picked = ref<Tab>()
+const tab = computed({
+  get: () => (picked.value && tabs.value.includes(picked.value) ? picked.value : tabs.value[0] ?? 'sepa'),
+  set: (v: Tab) => { picked.value = v },
+})
 
-const sepaFields = computed(() => sepa
-  ? [
+const sepaFields = computed(() => {
+  const sepa = d.value.sepa
+  return sepa
+    ? [
       { id: 'name', label: t('donate.name'), value: sepa.name },
       { id: 'iban', label: 'IBAN', value: groupIban(sepa.iban), copy: sepa.iban, mono: true },
       { id: 'bic', label: 'BIC', value: sepa.bic, mono: true },
       ...(sepa.bank ? [{ id: 'bank', label: t('donate.bank'), value: sepa.bank }] : []),
       { id: 'purpose', label: t('slip.purpose'), value: sepa.purpose },
     ]
-  : [])
+    : []
+})
 
-const networkId = ref(networks[0]?.id)
-const network = computed(() => networks.find(n => n.id === networkId.value) ?? networks[0])
+const networkId = ref(d.value.networks[0]?.id)
+const network = computed(() => d.value.networks.find(n => n.id === networkId.value) ?? d.value.networks[0])
 
 const copiedId = ref<string>()
 async function copy(id: string, text: string) {
@@ -85,7 +93,7 @@ defineExpose({ open: () => dialog.value?.showModal() })
     </fieldset>
 
     <section
-      v-if="tab === 'ips' && ips"
+      v-if="tab === 'ips' && d.ips"
       class="pane ips"
     >
       <p>{{ t('donate.ipsHint') }}</p>
@@ -113,20 +121,20 @@ defineExpose({ open: () => dialog.value?.showModal() })
       <button
         type="button"
         class="btn small mono"
-        @click="copy('ips', formatAccount(ips.account))"
+        @click="copy('ips', formatAccount(d.ips.account))"
       >
-        {{ copiedId === 'ips' ? t('actions.copied') : formatAccount(ips.account) }}
+        {{ copiedId === 'ips' ? t('actions.copied') : formatAccount(d.ips.account) }}
       </button>
     </section>
 
     <section
-      v-if="tab === 'sepa' && sepa"
+      v-if="tab === 'sepa' && d.sepa"
       class="pane sepa"
     >
       <p>{{ t('donate.sepaHint') }}</p>
       <QrCode
         class="qr"
-        :value="sepa.payload"
+        :value="d.sepa.payload"
         label="EPC QR"
       />
       <dl>
@@ -149,18 +157,27 @@ defineExpose({ open: () => dialog.value?.showModal() })
       </dl>
     </section>
 
+    <!-- v-show, not v-if: the links are cheap, and a language-specific link then exists in its prerendered HTML. -->
     <section
-      v-if="tab === 'card'"
+      v-show="tab === 'card'"
       class="pane links"
     >
-      <a
-        v-for="l in links"
+      <div
+        v-for="l in d.links"
         :key="l.id"
-        :href="l.url"
-        target="_blank"
-        rel="noopener"
-        class="btn"
-      >{{ l.label }} ↗</a>
+        class="link"
+      >
+        <a
+          :href="l.url"
+          target="_blank"
+          rel="noopener"
+          class="btn"
+        >{{ l.label }} ↗</a>
+        <span
+          v-if="l.hint"
+          class="hint"
+        >{{ t(`donate.${l.hint}`) }}</span>
+      </div>
     </section>
 
     <section
@@ -172,7 +189,7 @@ defineExpose({ open: () => dialog.value?.showModal() })
           {{ t('donate.network') }}
         </legend>
         <label
-          v-for="n in networks"
+          v-for="n in d.networks"
           :key="n.id"
           class="chip"
         ><input
@@ -251,5 +268,8 @@ h2 { margin: 0; font-size: 1.25rem; }
 .warn { font-size: var(--fs-xs); color: var(--text-muted); }
 
 .links { grid-template-columns: 1fr; }
+.link { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-3); }
+.link .btn { flex: none; }
+.link .hint { font-size: var(--fs-sm); color: var(--text-muted); }
 @media (max-width: 599.98px) { .donate { padding: 20px; } }
 </style>
